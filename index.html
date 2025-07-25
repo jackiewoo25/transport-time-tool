@@ -1,143 +1,163 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>運輸時間計算模組</title>
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <title>運輸工時互動模擬（完整版）</title>
   <style>
     body {
-      font-family: sans-serif;
-      padding: 10px;
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
       margin: 0;
+      padding: 20px;
     }
-    h2, h3 {
+    h1, h3 {
       text-align: center;
     }
-    .card {
-      padding: 12px;
-      margin: 8px;
-      background-color: #e0f7fa;
-      border-radius: 8px;
-      border: 1px solid #00acc1;
+    .section {
+      margin-bottom: 20px;
+    }
+    .pool, .timeline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 10px;
+      min-height: 60px;
+      background-color: white;
+      border-radius: 10px;
+      border: 2px dashed #ccc;
+    }
+    .block {
+      padding: 8px 12px;
+      border-radius: 10px;
+      backdrop-filter: blur(6px);
+      font-weight: bold;
       cursor: grab;
-      font-size: 18px;
-      text-align: center;
+      position: relative;
     }
-    .drag-area, .drop-zone {
-      width: 100%;
-      min-height: 150px;
-      margin: 10px 0;
-      padding: 10px;
-      border: 2px dashed #aaa;
-      border-radius: 8px;
-    }
-    button {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      font-size: 18px;
-      background-color: #00796b;
+    .pickup { background: rgba(200,255,200,0.6); }
+    .dropoff { background: rgba(200,230,255,0.6); }
+    .waiting { background: rgba(230,230,230,0.6); }
+    .duration { background: rgba(255,240,200,0.6); }
+    .work { background: rgba(255,200,250,0.6); }
+    .remove-btn {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: red;
       color: white;
-      border: none;
-      border-radius: 8px;
-      margin-top: 10px;
+      border-radius: 50%;
+      font-size: 12px;
+      width: 18px;
+      height: 18px;
+      text-align: center;
+      line-height: 18px;
+      cursor: pointer;
     }
-    #result {
-      margin-top: 20px;
-      font-size: 1.2em;
-      background: #f1f8e9;
-      padding: 10px;
-      border-radius: 8px;
-    }
-    label {
+    .time-label {
       display: block;
-      margin: 10px 0;
-      font-size: 16px;
+      font-size: 12px;
+      color: #555;
+      margin-top: 4px;
     }
   </style>
 </head>
 <body>
-  <h2>🚚 運輸時間計算模組（手機版）</h2>
-  <div class="drag-area">
-    <h3>提貨點</h3>
-    <div id="loading-list" class="sortable">
-      <div class="card" data-type="loading" data-name="藍海">藍海</div>
-      <div class="card" data-type="loading" data-name="KY3">KY3</div>
-    </div>
+
+<h1>📦 運輸工時互動模擬工具</h1>
+
+<div class="section">
+  <h3>出發時間設定</h3>
+  <div style="text-align:center;">
+    <input type="time" id="startTime" value="06:00" />
   </div>
+</div>
 
-  <div class="drag-area">
-    <h3>卸貨點</h3>
-    <div id="unloading-list" class="sortable">
-      <div class="card" data-type="unloading" data-name="AATT">AATT</div>
-      <div class="card" data-type="unloading" data-name="TIGF">TIGF</div>
-    </div>
+<div class="section">
+  <h3>🚛 重車 / 提貨點</h3>
+  <div class="pool" id="pickupPool">
+    <div class="block pickup" draggable="true">藍海</div>
+    <div class="block pickup" draggable="true">KY2</div>
+    <div class="block pickup" draggable="true">KY3</div>
+    <div class="block pickup" draggable="true">NK</div>
+    <div class="block pickup" draggable="true">KK</div>
+    <div class="block duration" draggable="true">重車</div>
   </div>
+</div>
 
-  <div class="drop-zone" id="route-builder">
-    <h3>🧩 拖曳至此組成流程</h3>
+<div class="section">
+  <h3>🏭 卸貨點</h3>
+  <div class="pool" id="dropoffPool">
+    <div class="block dropoff" draggable="true">AATT</div>
+    <div class="block dropoff" draggable="true">矽品和美一期</div>
+    <div class="block dropoff" draggable="true">美光FBT</div>
+    <div class="block dropoff" draggable="true">隆達竹南廠</div>
   </div>
+</div>
 
-  <label><input type="checkbox" id="heavy"> 重車（加上提貨時間）</label>
-  <button onclick="calculateTime()">🔍 計算總工時</button>
-  <div id="result"></div>
+<div class="section">
+  <h3>⏱ 路程 / 等待</h3>
+  <div class="pool" id="durationPool">
+    <div class="block duration" draggable="true">30分鐘</div>
+    <div class="block duration" draggable="true">60分鐘</div>
+    <div class="block duration" draggable="true">90分鐘</div>
+    <div class="block waiting" draggable="true">等待15分</div>
+    <div class="block waiting" draggable="true">等待30分</div>
+  </div>
+</div>
 
-  <script>
-    const loadingPoints = {
-      "藍海": { driveFromYard: 60, loadingTime: 60 },
-      "KY3": { driveFromYard: 70, loadingTime: 45 }
-    };
-    const unloadingPoints = {
-      "AATT": { driveFromLoading: 75, unloadingTime: 105 },
-      "TIGF": { driveFromLoading: 90, unloadingTime: 90 }
-    };
+<div class="section">
+  <h3>🛠 作業時間</h3>
+  <div class="pool" id="workPool">
+    <div class="block work" draggable="true">00:30</div>
+    <div class="block work" draggable="true">00:45</div>
+    <div class="block work" draggable="true">01:15</div>
+    <div class="block work" draggable="true">01:45</div>
+  </div>
+</div>
 
-    new Sortable(document.getElementById('loading-list'), { group: 'shared', animation: 150 });
-    new Sortable(document.getElementById('unloading-list'), { group: 'shared', animation: 150 });
-    new Sortable(document.getElementById('route-builder'), { group: 'shared', animation: 150 });
+<div class="section">
+  <h3>🧩 運輸流程時間線</h3>
+  <div class="timeline" id="timeline" ondrop="drop(event)" ondragover="allowDrop(event)">
+  </div>
+</div>
 
-    function calculateTime() {
-      const isHeavy = document.getElementById("heavy").checked;
-      const routeItems = document.querySelectorAll("#route-builder .card");
+<script>
+function allowDrop(ev) {
+  ev.preventDefault();
+}
 
-      let total = 0;
-      let log = [];
+function drop(ev) {
+  ev.preventDefault();
+  const id = ev.dataTransfer.getData("text");
+  const original = document.getElementById(id);
+  const clone = original.cloneNode(true);
+  clone.id = "";
+  clone.classList.add("timeline-block");
+  clone.setAttribute("draggable", false);
 
-      const yardTime = 0;
-      total += yardTime;
+  const close = document.createElement("div");
+  close.className = "remove-btn";
+  close.innerText = "✕";
+  close.onclick = () => clone.remove();
+  clone.appendChild(close);
 
-      let loading = null;
-      let unloading = null;
+  const timeLabel = document.createElement("span");
+  timeLabel.className = "time-label";
+  timeLabel.innerText = "時間待計算";
+  clone.appendChild(timeLabel);
 
-      routeItems.forEach(el => {
-        const name = el.dataset.name;
-        const type = el.dataset.type;
+  document.getElementById("timeline").appendChild(clone);
+}
 
-        if (type === "loading" && loading === null) {
-          loading = loadingPoints[name];
-          total += loading.driveFromYard;
-          log.push(`車場 → ${name} 行車 ${loading.driveFromYard} 分`);
-          if (isHeavy) {
-            total += loading.loadingTime;
-            log.push(`提貨時間 ${loading.loadingTime} 分`);
-          }
-        }
+document.querySelectorAll(".block").forEach((el, idx) => {
+  el.id = "block" + idx;
+  el.addEventListener("dragstart", ev => {
+    ev.dataTransfer.setData("text", ev.target.id);
+  });
+});
+</script>
 
-        if (type === "unloading" && unloading === null) {
-          unloading = unloadingPoints[name];
-          if (loading) {
-            total += unloading.driveFromLoading;
-            log.push(`從 ${Object.keys(loadingPoints).find(k => loadingPoints[k] === loading)} → ${name} 行車 ${unloading.driveFromLoading} 分`);
-          }
-          total += unloading.unloadingTime;
-          log.push(`卸貨時間 ${unloading.unloadingTime} 分`);
-        }
-      });
-
-      document.getElementById("result").innerHTML =
-        `<p>✅ 總工時：${Math.floor(total / 60)} 小時 ${total % 60} 分</p><ul><li>${log.join('</li><li>')}</li></ul>`;
-    }
-  </script>
 </body>
 </html>
