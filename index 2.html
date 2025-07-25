@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>運輸工時互動模擬（完整版）</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h3 {
+      text-align: center;
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    .pool, .timeline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 10px;
+      min-height: 60px;
+      background-color: white;
+      border-radius: 10px;
+      border: 2px dashed #ccc;
+    }
+    .block {
+      padding: 8px 12px;
+      border-radius: 10px;
+      backdrop-filter: blur(6px);
+      font-weight: bold;
+      cursor: grab;
+      position: relative;
+    }
+    .pickup { background: rgba(200,255,200,0.6); }
+    .dropoff { background: rgba(200,230,255,0.6); }
+    .waiting { background: rgba(230,230,230,0.6); }
+    .duration { background: rgba(255,240,200,0.6); }
+    .work { background: rgba(255,200,250,0.6); }
+    .remove-btn {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: red;
+      color: white;
+      border-radius: 50%;
+      font-size: 12px;
+      width: 18px;
+      height: 18px;
+      text-align: center;
+      line-height: 18px;
+      cursor: pointer;
+    }
+    .time-label {
+      display: block;
+      font-size: 12px;
+      color: #555;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>📦 運輸工時互動模擬工具</h1>
+
+<div class="section">
+  <h3>出發時間設定</h3>
+  <div style="text-align:center;">
+    <input type="time" id="startTime" value="06:00" />
+  </div>
+</div>
+
+<div class="section">
+  <h3>🚛 重車 / 提貨點</h3>
+  <div class="pool" id="pickupPool">
+    <div class="block pickup" draggable="true">藍海</div>
+    <div class="block pickup" draggable="true">KY2</div>
+    <div class="block pickup" draggable="true">KY3</div>
+    <div class="block pickup" draggable="true">NK</div>
+    <div class="block pickup" draggable="true">KK</div>
+    <div class="block duration" draggable="true">重車</div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>🏭 卸貨點</h3>
+  <div class="pool" id="dropoffPool">
+    <div class="block dropoff" draggable="true">AATT</div>
+    <div class="block dropoff" draggable="true">矽品和美一期</div>
+    <div class="block dropoff" draggable="true">美光FBT</div>
+    <div class="block dropoff" draggable="true">隆達竹南廠</div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>⏱ 路程 / 等待</h3>
+  <div class="pool" id="durationPool">
+    <div class="block duration" draggable="true">30分鐘</div>
+    <div class="block duration" draggable="true">60分鐘</div>
+    <div class="block duration" draggable="true">90分鐘</div>
+    <div class="block waiting" draggable="true">等待15分</div>
+    <div class="block waiting" draggable="true">等待30分</div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>🛠 作業時間</h3>
+  <div class="pool" id="workPool">
+    <div class="block work" draggable="true">00:30</div>
+    <div class="block work" draggable="true">00:45</div>
+    <div class="block work" draggable="true">01:15</div>
+    <div class="block work" draggable="true">01:45</div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>🧩 運輸流程時間線</h3>
+  <div class="timeline" id="timeline" ondrop="drop(event)" ondragover="allowDrop(event)">
+  </div>
+</div>
+
+<script>
+function allowDrop(ev) {
+  ev.preventDefault();
+}
+
+function drop(ev) {
+  ev.preventDefault();
+  const id = ev.dataTransfer.getData("text");
+  const original = document.getElementById(id);
+  const clone = original.cloneNode(true);
+  clone.id = "";
+  clone.classList.add("timeline-block");
+  clone.setAttribute("draggable", false);
+
+  const close = document.createElement("div");
+  close.className = "remove-btn";
+  close.innerText = "✕";
+  close.onclick = () => clone.remove();
+  clone.appendChild(close);
+
+  const timeLabel = document.createElement("span");
+  timeLabel.className = "time-label";
+  timeLabel.innerText = "時間待計算";
+  clone.appendChild(timeLabel);
+
+  document.getElementById("timeline").appendChild(clone);
+}
+
+document.querySelectorAll(".block").forEach((el, idx) => {
+  el.id = "block" + idx;
+  el.addEventListener("dragstart", ev => {
+    ev.dataTransfer.setData("text", ev.target.id);
+  });
+});
+</script>
+
+</body>
+</html>
