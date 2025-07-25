@@ -2,178 +2,166 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>運輸流程時間視覺模組</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>運輸流程組合模擬</title>
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: #f2f4f8;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      background: linear-gradient(to right, #e0f7fa, #f1f8e9);
     }
     h2 {
       text-align: center;
-      margin-bottom: 20px;
+      font-weight: 500;
+      padding: 1em 0;
+      color: #2e7d32;
+    }
+    .container {
+      display: grid;
+      gap: 1.2em;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1em 2em;
     }
     .section {
-      margin-bottom: 30px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 20px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(15px) saturate(120%);
+      padding: 1em;
     }
     .section-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
+      font-size: 1.1em;
+      font-weight: 600;
+      color: #1b5e20;
+      margin-bottom: 0.6em;
     }
-    .button-group {
+    .btn-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 0.6em;
     }
     .btn {
-      padding: 10px 15px;
-      border-radius: 16px;
-      font-size: 16px;
+      padding: 0.6em 1.2em;
       border: none;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .btn:hover {
-      transform: scale(1.05);
-    }
-    .btn.pickup { background: rgba(173, 255, 168, 0.6); }
-    .btn.dropoff { background: rgba(173, 216, 230, 0.6); }
-    .btn.route { background: rgba(255, 255, 153, 0.7); }
-    .btn.wait { background: rgba(255, 182, 193, 0.6); }
-    .btn.operation { background: rgba(238, 130, 238, 0.6); }
-
-    #timeline {
-      margin-top: 30px;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.5);
       border-radius: 16px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-      min-height: 80px;
+      font-size: 0.9em;
+      cursor: pointer;
+      backdrop-filter: blur(20px);
+      transition: all 0.25s ease;
     }
-    .timeline-step {
-      display: inline-block;
-      margin: 5px;
-      padding: 10px 12px;
+    .btn:active {
+      transform: scale(0.96);
+    }
+    .green { background: rgba(200, 255, 200, 0.7); }
+    .blue { background: rgba(180, 220, 255, 0.7); }
+    .yellow { background: rgba(255, 255, 180, 0.7); }
+    .pink { background: rgba(255, 200, 230, 0.7); }
+    .purple { background: rgba(220, 200, 255, 0.7); }
+
+    .timeline {
       background: white;
-      border-radius: 12px;
-      font-size: 14px;
-      border: 1px solid #ccc;
+      border-radius: 16px;
+      padding: 1em;
+      margin-top: 1em;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-    #alert {
-      color: red;
+    .timeline-title {
       font-weight: bold;
-      margin-top: 10px;
+      color: #1565c0;
+      margin-bottom: 0.6em;
+    }
+    .timeline-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5em;
+    }
+    .block {
+      padding: 0.6em 1em;
+      border-radius: 14px;
+      font-size: 0.85em;
+      color: #333;
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      backdrop-filter: blur(12px);
+    }
+    .start-time {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.6em;
+    }
+    .start-time label {
+      margin-right: 0.5em;
+      font-weight: 500;
+    }
+    input[type="time"] {
+      padding: 0.4em;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      outline: none;
     }
   </style>
 </head>
 <body>
-  <h2>🧩 運輸流程視覺模組</h2>
-  
-  <div class="section">
-    <div class="section-title">🚛 重車 / 提貨點</div>
-    <div class="button-group">
-      <button class="btn pickup" onclick="addStep('藍海')">藍海</button>
-      <button class="btn pickup" onclick="addStep('KY2')">KY2</button>
-      <button class="btn pickup" onclick="addStep('KY3')">KY3</button>
-      <button class="btn pickup" onclick="addStep('NK')">NK</button>
-      <button class="btn pickup" onclick="addStep('KK')">KK</button>
+  <h2>🚚 運輸流程模擬工具</h2>
+  <div class="container">
+    <div class="section">
+      <div class="section-title">🚛 重車 / 提貨點</div>
+      <div class="btn-group">
+        <button class="btn green">藍海</button>
+        <button class="btn green">KY2</button>
+        <button class="btn green">KK</button>
+        <button class="btn green">NK</button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">📦 卸貨點</div>
+      <div class="btn-group">
+        <button class="btn blue">矽品潭子大</button>
+        <button class="btn blue">友達后里備用</button>
+        <button class="btn blue">矽品和美一期</button>
+        <button class="btn blue">矽品和美二期</button>
+        <button class="btn blue">環鴻新桶</button>
+        <button class="btn blue">展頌斗六</button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">🕓 路程 / 等待</div>
+      <div class="btn-group">
+        <button class="btn yellow">15分</button>
+        <button class="btn yellow">30分</button>
+        <button class="btn yellow">60分</button>
+        <button class="btn pink">15分</button>
+        <button class="btn pink">30分</button>
+        <button class="btn pink">60分</button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">🔧 作業時間</div>
+      <div class="btn-group">
+        <button class="btn purple">15分</button>
+        <button class="btn purple">30分</button>
+        <button class="btn purple">60分</button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="timeline">
+        <div class="timeline-title">🧭 運輸流程時間線</div>
+        <div class="start-time">
+          <label>車場出發時間：</label>
+          <input type="time" value="04:00" />
+        </div>
+        <div class="timeline-list">
+          <div class="block green">藍海</div>
+          <div class="block yellow">60分鐘</div>
+          <div class="block blue">矽品和美一期</div>
+          <div class="block purple">30分鐘</div>
+          <div class="block pink">等待15分</div>
+          <div class="block yellow">30分鐘</div>
+        </div>
+      </div>
     </div>
   </div>
-
-  <div class="section">
-    <div class="section-title">📦 卸貨點</div>
-    <div class="button-group" id="dropoffs"></div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">🕒 路程</div>
-    <div class="button-group">
-      <button class="btn route" onclick="addStep('15分鐘')">15分鐘</button>
-      <button class="btn route" onclick="addStep('30分鐘')">30分鐘</button>
-      <button class="btn route" onclick="addStep('60分鐘')">60分鐘</button>
-      <button class="btn route" onclick="addStep('90分鐘')">90分鐘</button>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">⏳ 等待</div>
-    <div class="button-group">
-      <button class="btn wait" onclick="addStep('等待15分鐘')">等待15分鐘</button>
-      <button class="btn wait" onclick="addStep('等待30分鐘')">等待30分鐘</button>
-      <button class="btn wait" onclick="addStep('等待60分鐘')">等待60分鐘</button>
-      <button class="btn wait" onclick="addStep('等待90分鐘')">等待90分鐘</button>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">🔧 作業時間</div>
-    <div class="button-group">
-      <button class="btn operation" onclick="addStep('作業00:30')">00:30</button>
-      <button class="btn operation" onclick="addStep('作業00:45')">00:45</button>
-      <button class="btn operation" onclick="addStep('作業01:45')">01:45</button>
-    </div>
-  </div>
-
-  <div id="timeline">
-    <strong>🚚 運輸流程時間線：</strong>
-  </div>
-  <div id="alert"></div>
-
-  <script>
-    const dropoffs = [
-      '鹿港銀泰','矽品潭子大','友達后里備用','環鴻新桶','環鴻南崗','美光后里','展頌斗六','展送竹山','矽品潭子小','晉椿','松和50N','久允工業','明基材料','艾杰旭一期','菱生中港','菱生2廠','菱生5廠','菱生1廠','矽品和美一期','矽品和美二期','超豐頭份','烏日啤酒','中油台中80N','台灣特品','台大氣體','巨菱精密','亞洲光學','美光FBT','隆達竹南廠','旺宏新竹735A'
-    ];
-    dropoffs.forEach(name => {
-      const btn = document.createElement('button');
-      btn.className = 'btn dropoff';
-      btn.innerText = name;
-      btn.onclick = () => addStep(name);
-      document.getElementById('dropoffs').appendChild(btn);
-    });
-
-    const timeline = document.getElementById("timeline");
-    const alertBox = document.getElementById("alert");
-    let steps = [];
-
-    function addStep(step) {
-      alertBox.innerText = '';
-      const last = steps[steps.length - 1] || '';
-      const isDropoff = dropoffs.includes(step);
-      const isRoute = /分鐘$/.test(step) && !step.startsWith("等待");
-
-      if (isDropoff && last && dropoffs.includes(last)) {
-        alertBox.innerText = '❗ 卸貨點後不能再接卸貨點，請加入路程或作業';
-        return;
-      }
-
-      // 自動補車場
-      if (isDropoff && !isRoute) {
-        const next = steps[steps.length];
-        if (!next || (!dropoffs.includes(next) && !next.includes('分鐘'))) {
-          steps.push('路程：60分鐘');
-          steps.push('回車場');
-        }
-      }
-
-      steps.push(step);
-      renderTimeline();
-    }
-
-    function renderTimeline() {
-      timeline.innerHTML = '<strong>🚚 運輸流程時間線：</strong>';
-      steps.forEach(s => {
-        const el = document.createElement('span');
-        el.className = 'timeline-step';
-        el.innerText = s;
-        timeline.appendChild(el);
-      });
-    }
-  </script>
 </body>
 </html>
