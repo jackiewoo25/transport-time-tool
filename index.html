@@ -1,163 +1,166 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>運輸工時互動模擬（完整版）</title>
+  <title>運輸流程時間模組</title>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f0f2f5;
-      margin: 0;
-      padding: 20px;
+      font-family: sans-serif;
+      padding: 10px;
+      background-color: #f4f6f8;
     }
-    h1, h3 {
+    h2 {
       text-align: center;
     }
     .section {
-      margin-bottom: 20px;
-    }
-    .pool, .timeline {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+      border: 2px dashed #bbb;
+      border-radius: 10px;
+      margin: 10px 0;
       padding: 10px;
       min-height: 60px;
-      background-color: white;
-      border-radius: 10px;
-      border: 2px dashed #ccc;
+      background: #fff;
     }
-    .block {
-      padding: 8px 12px;
-      border-radius: 10px;
-      backdrop-filter: blur(6px);
+    .label {
       font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .card {
+      display: inline-block;
+      margin: 6px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-size: 16px;
       cursor: grab;
-      position: relative;
+      user-select: none;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
     }
-    .pickup { background: rgba(200,255,200,0.6); }
-    .dropoff { background: rgba(200,230,255,0.6); }
-    .waiting { background: rgba(230,230,230,0.6); }
-    .duration { background: rgba(255,240,200,0.6); }
-    .work { background: rgba(255,200,250,0.6); }
-    .remove-btn {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: red;
-      color: white;
-      border-radius: 50%;
-      font-size: 12px;
-      width: 18px;
-      height: 18px;
-      text-align: center;
-      line-height: 18px;
-      cursor: pointer;
-    }
-    .time-label {
+    .重車 { background-color: #fff4cc; border: 1px solid #ffbb00; }
+    .提貨點 { background-color: #d9f8d9; border: 1px solid #5cb85c; }
+    .卸貨點 { background-color: #cce6ff; border: 1px solid #3399ff; }
+    .路程, .等待時間 { background-color: #fff0cc; border: 1px solid #e6b800; }
+    .作業時間 { background-color: #f8d9f8; border: 1px solid #d36cd3; }
+    .時間塊 span {
       display: block;
       font-size: 12px;
-      color: #555;
-      margin-top: 4px;
+      margin-top: 2px;
+      color: #888;
+    }
+    .remove-btn {
+      margin-left: 8px;
+      color: red;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
+  <h2>🚛 運輸流程時間模組</h2>
 
-<h1>📦 運輸工時互動模擬工具</h1>
-
-<div class="section">
-  <h3>出發時間設定</h3>
-  <div style="text-align:center;">
-    <input type="time" id="startTime" value="06:00" />
+  <div class="label">🚚 重車 / 提貨點</div>
+  <div class="section" id="pickup">
+    <div class="card 重車">重車</div>
+    <div class="card 提貨點">藍海</div>
+    <div class="card 提貨點">KY2</div>
+    <div class="card 提貨點">KY3</div>
+    <div class="card 提貨點">NK</div>
+    <div class="card 提貨點">KK</div>
   </div>
-</div>
 
-<div class="section">
-  <h3>🚛 重車 / 提貨點</h3>
-  <div class="pool" id="pickupPool">
-    <div class="block pickup" draggable="true">藍海</div>
-    <div class="block pickup" draggable="true">KY2</div>
-    <div class="block pickup" draggable="true">KY3</div>
-    <div class="block pickup" draggable="true">NK</div>
-    <div class="block pickup" draggable="true">KK</div>
-    <div class="block duration" draggable="true">重車</div>
+  <div class="label">📦 卸貨點</div>
+  <div class="section" id="dropoff">
+    <div class="card 卸貨點">鹿港銀泰</div>
+    <div class="card 卸貨點">矽品潭子大</div>
+    <div class="card 卸貨點">友達后里備用</div>
+    <div class="card 卸貨點">環鴻新桶</div>
+    <div class="card 卸貨點">環鴻南崗</div>
+    <div class="card 卸貨點">美光后里</div>
+    <div class="card 卸貨點">展頌斗六</div>
+    <div class="card 卸貨點">展送竹山</div>
+    <div class="card 卸貨點">矽品潭子小</div>
+    <div class="card 卸貨點">晉椿</div>
+    <div class="card 卸貨點">松和50N</div>
+    <div class="card 卸貨點">久允工業</div>
+    <div class="card 卸貨點">明基材料</div>
+    <div class="card 卸貨點">艾杰旭一期</div>
+    <div class="card 卸貨點">菱生中港</div>
+    <div class="card 卸貨點">菱生2廠</div>
+    <div class="card 卸貨點">菱生5廠</div>
+    <div class="card 卸貨點">菱生1廠</div>
+    <div class="card 卸貨點">矽品和美一期</div>
+    <div class="card 卸貨點">矽品和美二期</div>
+    <div class="card 卸貨點">超豐頭份</div>
+    <div class="card 卸貨點">烏日啤酒</div>
+    <div class="card 卸貨點">中油台中80N</div>
+    <div class="card 卸貨點">台灣特品</div>
+    <div class="card 卸貨點">台大氣體</div>
+    <div class="card 卸貨點">巨菱精密</div>
+    <div class="card 卸貨點">亞洲光學</div>
+    <div class="card 卸貨點">美光FBT</div>
+    <div class="card 卸貨點">隆達竹南廠</div>
+    <div class="card 卸貨點">旺宏新竹735A</div>
   </div>
-</div>
 
-<div class="section">
-  <h3>🏭 卸貨點</h3>
-  <div class="pool" id="dropoffPool">
-    <div class="block dropoff" draggable="true">AATT</div>
-    <div class="block dropoff" draggable="true">矽品和美一期</div>
-    <div class="block dropoff" draggable="true">美光FBT</div>
-    <div class="block dropoff" draggable="true">隆達竹南廠</div>
+  <div class="label">🕒 路程 / 等待</div>
+  <div class="section" id="route">
+    <div class="card 路程">30分鐘</div>
+    <div class="card 路程">60分鐘</div>
+    <div class="card 路程">90分鐘</div>
+    <div class="card 等待時間">等待15分</div>
+    <div class="card 等待時間">等待30分</div>
   </div>
-</div>
 
-<div class="section">
-  <h3>⏱ 路程 / 等待</h3>
-  <div class="pool" id="durationPool">
-    <div class="block duration" draggable="true">30分鐘</div>
-    <div class="block duration" draggable="true">60分鐘</div>
-    <div class="block duration" draggable="true">90分鐘</div>
-    <div class="block waiting" draggable="true">等待15分</div>
-    <div class="block waiting" draggable="true">等待30分</div>
+  <div class="label">🛠 作業時間</div>
+  <div class="section" id="work">
+    <div class="card 作業時間">00:30</div>
+    <div class="card 作業時間">00:45</div>
+    <div class="card 作業時間">01:15</div>
+    <div class="card 作業時間">01:45</div>
   </div>
-</div>
 
-<div class="section">
-  <h3>🛠 作業時間</h3>
-  <div class="pool" id="workPool">
-    <div class="block work" draggable="true">00:30</div>
-    <div class="block work" draggable="true">00:45</div>
-    <div class="block work" draggable="true">01:15</div>
-    <div class="block work" draggable="true">01:45</div>
-  </div>
-</div>
+  <div class="label">🔗 運輸流程時間線</div>
+  <div class="section" id="timeline"></div>
 
-<div class="section">
-  <h3>🧩 運輸流程時間線</h3>
-  <div class="timeline" id="timeline" ondrop="drop(event)" ondragover="allowDrop(event)">
-  </div>
-</div>
+  <script>
+    const zones = ['pickup', 'dropoff', 'route', 'work', 'timeline'];
+    zones.forEach(id => new Sortable(document.getElementById(id), {
+      group: 'shared',
+      animation: 150,
+      onAdd: function (evt) {
+        const el = evt.item;
+        const target = evt.to.id;
 
-<script>
-function allowDrop(ev) {
-  ev.preventDefault();
-}
+        if (target === 'timeline') {
+          const type = el.classList.contains('卸貨點') ? 'drop' : '';
+          if (type === 'drop') maybeInsertReturn(el);
+        }
+      }
+    }));
 
-function drop(ev) {
-  ev.preventDefault();
-  const id = ev.dataTransfer.getData("text");
-  const original = document.getElementById(id);
-  const clone = original.cloneNode(true);
-  clone.id = "";
-  clone.classList.add("timeline-block");
-  clone.setAttribute("draggable", false);
+    function maybeInsertReturn(el) {
+      const timeline = document.getElementById('timeline');
+      const cards = [...timeline.children];
+      const idx = cards.indexOf(el);
+      const next = cards[idx + 1];
 
-  const close = document.createElement("div");
-  close.className = "remove-btn";
-  close.innerText = "✕";
-  close.onclick = () => clone.remove();
-  clone.appendChild(close);
+      if (!next || next.classList.contains('路程') || next.classList.contains('等待時間')) {
+        return;
+      }
 
-  const timeLabel = document.createElement("span");
-  timeLabel.className = "time-label";
-  timeLabel.innerText = "時間待計算";
-  clone.appendChild(timeLabel);
+      // 插入 [回程路程] + [回到車場] 卡片
+      const backTrip = createCard('60分鐘', '路程');
+      const backToYard = createCard('回車場', '重車');
 
-  document.getElementById("timeline").appendChild(clone);
-}
+      timeline.insertBefore(backTrip, next);
+      timeline.insertBefore(backToYard, next);
+    }
 
-document.querySelectorAll(".block").forEach((el, idx) => {
-  el.id = "block" + idx;
-  el.addEventListener("dragstart", ev => {
-    ev.dataTransfer.setData("text", ev.target.id);
-  });
-});
-</script>
-
+    function createCard(text, cls) {
+      const el = document.createElement('div');
+      el.className = `card ${cls}`;
+      el.textContent = text;
+      return el;
+    }
+  </script>
 </body>
 </html>
