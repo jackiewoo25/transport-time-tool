@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>運輸時間計算模組</title>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 10px;
+      margin: 0;
+    }
+    h2, h3 {
+      text-align: center;
+    }
+    .card {
+      padding: 12px;
+      margin: 8px;
+      background-color: #e0f7fa;
+      border-radius: 8px;
+      border: 1px solid #00acc1;
+      cursor: grab;
+      font-size: 18px;
+      text-align: center;
+    }
+    .drag-area, .drop-zone {
+      width: 100%;
+      min-height: 150px;
+      margin: 10px 0;
+      padding: 10px;
+      border: 2px dashed #aaa;
+      border-radius: 8px;
+    }
+    button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      font-size: 18px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      background: #f1f8e9;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    label {
+      display: block;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h2>🚚 運輸時間計算模組（手機版）</h2>
+  <div class="drag-area">
+    <h3>提貨點</h3>
+    <div id="loading-list" class="sortable">
+      <div class="card" data-type="loading" data-name="藍海">藍海</div>
+      <div class="card" data-type="loading" data-name="KY3">KY3</div>
+    </div>
+  </div>
+
+  <div class="drag-area">
+    <h3>卸貨點</h3>
+    <div id="unloading-list" class="sortable">
+      <div class="card" data-type="unloading" data-name="AATT">AATT</div>
+      <div class="card" data-type="unloading" data-name="TIGF">TIGF</div>
+    </div>
+  </div>
+
+  <div class="drop-zone" id="route-builder">
+    <h3>🧩 拖曳至此組成流程</h3>
+  </div>
+
+  <label><input type="checkbox" id="heavy"> 重車（加上提貨時間）</label>
+  <button onclick="calculateTime()">🔍 計算總工時</button>
+  <div id="result"></div>
+
+  <script>
+    const loadingPoints = {
+      "藍海": { driveFromYard: 60, loadingTime: 60 },
+      "KY3": { driveFromYard: 70, loadingTime: 45 }
+    };
+    const unloadingPoints = {
+      "AATT": { driveFromLoading: 75, unloadingTime: 105 },
+      "TIGF": { driveFromLoading: 90, unloadingTime: 90 }
+    };
+
+    new Sortable(document.getElementById('loading-list'), { group: 'shared', animation: 150 });
+    new Sortable(document.getElementById('unloading-list'), { group: 'shared', animation: 150 });
+    new Sortable(document.getElementById('route-builder'), { group: 'shared', animation: 150 });
+
+    function calculateTime() {
+      const isHeavy = document.getElementById("heavy").checked;
+      const routeItems = document.querySelectorAll("#route-builder .card");
+
+      let total = 0;
+      let log = [];
+
+      const yardTime = 0;
+      total += yardTime;
+
+      let loading = null;
+      let unloading = null;
+
+      routeItems.forEach(el => {
+        const name = el.dataset.name;
+        const type = el.dataset.type;
+
+        if (type === "loading" && loading === null) {
+          loading = loadingPoints[name];
+          total += loading.driveFromYard;
+          log.push(`車場 → ${name} 行車 ${loading.driveFromYard} 分`);
+          if (isHeavy) {
+            total += loading.loadingTime;
+            log.push(`提貨時間 ${loading.loadingTime} 分`);
+          }
+        }
+
+        if (type === "unloading" && unloading === null) {
+          unloading = unloadingPoints[name];
+          if (loading) {
+            total += unloading.driveFromLoading;
+            log.push(`從 ${Object.keys(loadingPoints).find(k => loadingPoints[k] === loading)} → ${name} 行車 ${unloading.driveFromLoading} 分`);
+          }
+          total += unloading.unloadingTime;
+          log.push(`卸貨時間 ${unloading.unloadingTime} 分`);
+        }
+      });
+
+      document.getElementById("result").innerHTML =
+        `<p>✅ 總工時：${Math.floor(total / 60)} 小時 ${total % 60} 分</p><ul><li>${log.join('</li><li>')}</li></ul>`;
+    }
+  </script>
+</body>
+</html>
