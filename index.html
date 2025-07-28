@@ -59,7 +59,6 @@
     </div>
     <div class="label">卸貨點</div>
     <div class="section" id="dropSection" style="max-width:100%;">
-      <!-- 全部卸貨點 -->
       <button class="block-btn blue" onclick="addBlock('卸貨點','鹿港銀泰','blue')">鹿港銀泰</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','矽品潭子大','blue')">矽品潭子大</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','友達后里備用','blue')">友達后里備用</button>
@@ -68,7 +67,7 @@
       <button class="block-btn blue" onclick="addBlock('卸貨點','美光后里','blue')">美光后里</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','美光AATT','blue')">美光AATT</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','展頌斗六','blue')">展頌斗六</button>
-      <button class="block-btn blue" onclick="addBlock('卸貨點','展送竹山','blue')">展送竹山</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','展頌竹山','blue')">展頌竹山</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','矽品潭子小','blue')">矽品潭子小</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','晉椿','blue')">晉椿</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','松和50N','blue')">松和50N</button>
@@ -126,16 +125,18 @@
   <script>
     let timelineData = [];
     let groupCounter = 0;
+
     function toHHMM(mins) {
       let h = Math.floor(mins/60)%24;
       let m = mins%60;
       return (h<10?'0':'')+h+':'+(m<10?'0':'')+m;
     }
+
     function updateTimeline() {
       const timeline = document.getElementById('timeline');
       timeline.innerHTML = '';
       let totalMin = 0;
-      let startStr = document.getElementById('startTime') ? document.getElementById('startTime').value : '06:00';
+      let startStr = window.startTimeValue || '06:00';
       let [h, m] = startStr.split(':').map(x=>parseInt(x,10));
       let nowMin = h*60 + m;
       let timeNow = nowMin;
@@ -199,8 +200,17 @@
         <span class="summary-row">預計結束時間：${endStr}</span>
         <span class="summary-row">總工時：${totalMin} 分鐘｜${minStr}</span>
       `;
-      document.getElementById('startTime').addEventListener('input', updateTimeline);
+      // 只加一次 event listener
+      const startInput = document.getElementById('startTime');
+      if(!startInput.hasListener){
+        startInput.addEventListener('input', function(e){
+          window.startTimeValue = this.value;
+          updateTimeline();
+        });
+        startInput.hasListener = true;
+      }
     }
+
     function delBlockAndAfter(idx) {
       timelineData = timelineData.slice(0, idx);
       updateTimeline();
