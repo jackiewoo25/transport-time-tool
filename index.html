@@ -6,205 +6,160 @@
   <title>運輸流程時間線工具</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --glass-bg: rgba(255,255,255,0.52);
+      --glass-blur: blur(16px) saturate(1.07);
+      --primary-green: rgba(120,211,183,0.32);
+      --primary-blue: rgba(115,168,255,0.33);
+      --primary-gray: rgba(195,200,210,0.28);
+      --primary-pink: rgba(253,170,212,0.34);
+      --primary-purple: rgba(180,158,255,0.32);
+      --primary-purple-deep: rgba(125,111,203,0.33);
+      --glass-shadow: 0 6px 24px rgba(130,160,190,0.12), 0 1.5px 10px rgba(220,235,255,0.13);
+      --del-btn: #FF4567;
+      --del-btn-hover: #CC2347;
+      --del-btn-shadow: 0 2.5px 8px rgba(255,75,120,0.13);
+    }
     html, body {
-      background: linear-gradient(135deg, #d7e8fa 0%, #e9eef7 52%, #f6faff 100%);
-      margin: 0; padding: 0;
-      font-family: 'San Francisco', 'Noto Sans TC', 'PingFang TC', 'Helvetica Neue', Arial, sans-serif;
-      color: #23272E;
+      background: radial-gradient(ellipse 110% 65% at 40% 60%, #e9eef7 60%, #e2eaff 100%);
+      margin:0; padding:0;
+      font-family: 'SF Pro Display', 'Noto Sans TC', 'PingFang TC', 'Helvetica Neue', Arial, sans-serif;
+      letter-spacing: 0.01em;
     }
     .container {
-      max-width: 980px;
-      margin: 36px auto 18px auto;
-      background: rgba(255,255,255,0.60);
+      max-width: 1000px; margin: 34px auto 24px auto;
+      background: var(--glass-bg);
       border-radius: 28px;
-      box-shadow: 0 10px 40px 0 rgba(80,130,255,0.13), 0 2px 12px 0 rgba(30,80,150,0.08);
-      padding: 2.3em 2em 1.4em 2em;
-      backdrop-filter: blur(33px) saturate(1.17) brightness(1.08) contrast(1.12);
-      overflow: hidden;
+      box-shadow: var(--glass-shadow);
+      padding: 2.5em 2.3em 2.1em 2.3em;
+      backdrop-filter: var(--glass-blur);
     }
     h1 {
-      text-align: center;
-      font-weight: 800;
-      font-size: 2.18em;
-      letter-spacing: 1.6px;
-      color: #111217;
-      margin-bottom: 1.9em;
-      text-shadow: 0 2.5px 6px rgba(170,220,255,0.11), 0 1px 5px rgba(60,120,210,0.05);
+      text-align: center; margin-bottom: 1.1em;
+      letter-spacing: 1.2px; font-size: 2.1em; font-weight: 700;
+      color: #253246;
+      text-shadow: 0 3px 16px rgba(255,255,255,0.15);
     }
     .label {
-      font-weight: 700;
-      font-size: 1.17em;
-      color: #295AAC;
-      margin: 1.6em 0 0.3em 0;
-      letter-spacing: 1.1px;
-      text-shadow: 0 1px 6px rgba(180,210,255,0.07);
+      font-weight: 900; margin: 1.7em 0 0.2em 0;
+      font-size: 1.13em; color: #406fd1;
+      letter-spacing: 1.2px;
     }
     .section {
-      display: flex; flex-wrap: wrap; gap: 0.7em; margin-bottom: 0.36em;
+      display: flex; flex-wrap: wrap; gap: 0.65em; margin-bottom: 0.3em;
     }
     .block-btn {
-      padding: 10px 22px;
-      border: none;
-      border-radius: 19px;
-      font-weight: 700;
-      font-size: 17.3px;
-      margin-bottom: 8px;
-      margin-right: 5px;
+      padding: 9px 22px; font-size: 15.7px; border: none; border-radius: 17px;
+      font-weight: 600; letter-spacing: 1.1px; margin-bottom: 7px; margin-right: 3px;
       cursor: pointer;
-      letter-spacing: 0.8px;
-      box-shadow: 0 2.5px 11px rgba(66,112,200,0.07);
-      opacity: 0.97;
-      transition: transform 0.13s, box-shadow 0.13s, background 0.19s;
-      backdrop-filter: blur(25px) saturate(1.12);
-      user-select: none;
-      outline: none;
+      box-shadow: 0 1.7px 9px rgba(170,170,190,0.10);
+      backdrop-filter: var(--glass-blur);
+      opacity: 0.96;
+      border: none;
+      transition: transform 0.14s, box-shadow 0.17s, background 0.14s;
     }
-    .block-btn:active { transform: scale(0.96);}
-    .block-btn.green {
-      background: linear-gradient(110deg, #33C17D 62%, #72ffd8 100%);
-      color: #fff; border: none;
-      box-shadow: 0 2px 10px rgba(40,180,110,0.11);
+    .block-btn:active { transform: scale(0.94);}
+    .block-btn.green { background: var(--primary-green);}
+    .block-btn.blue  { background: var(--primary-blue);}
+    .block-btn.gray  { background: var(--primary-gray);}
+    .block-btn.pink  { background: var(--primary-pink);}
+    .block-btn.purple-l { background: var(--primary-purple);}
+    .block-btn.purple-d { background: var(--primary-purple-deep);}
+    .block-btn.green, .block-btn.blue, .block-btn.purple-l, .block-btn.purple-d {
+      color: #214F4A; font-weight: 700; letter-spacing: 1.05px;
+      text-shadow: 0 1px 5px #fff7;
     }
-    .block-btn.blue {
-      background: linear-gradient(115deg, #2C74FF 58%, #81c9ff 100%);
-      color: #fff; border: none;
-      box-shadow: 0 2px 13px rgba(40,110,255,0.10);
-    }
-    .block-btn.gray {
-      background: linear-gradient(115deg, #f4f7fc 72%, #e9ebf1 100%);
-      color: #23272E;
-      border: 1.4px solid #CFD6E4;
-      box-shadow: 0 2px 10px rgba(180,190,220,0.08);
-    }
-    .block-btn.pink {
-      background: linear-gradient(120deg, #FFB5C8 60%, #FFA0BF 100%);
-      color: #701A36;
-      box-shadow: 0 2px 10px rgba(230,120,170,0.10);
-    }
-    .block-btn.purple-l {
-      background: linear-gradient(110deg, #B6A8FF 65%, #e7e2ff 100%);
-      color: #442C74;
-      box-shadow: 0 2px 10px rgba(150,120,255,0.11);
-    }
-    .block-btn.purple-d {
-      background: linear-gradient(110deg, #735AE6 61%, #B9A8FF 100%);
-      color: #fff;
-      box-shadow: 0 2px 10px rgba(110,90,200,0.10);
-    }
+    .block-btn.gray { color:#2B2F37; font-weight:600;}
+    .block-btn.pink { color: #97345F; font-weight:700;}
     .custom-input {
-      padding: 8px 15px;
-      border-radius: 12px;
-      border: 1.3px solid #B6C8E8;
-      font-size: 17px;
-      background: rgba(255,255,255,0.95);
-      box-shadow: 0 2px 8px rgba(100,160,200,0.07);
-      outline: none;
-      margin-right: 8px;
-      font-weight: 600;
+      padding: 8px 13px; border-radius: 9px; border: 1.2px solid #c8d2e3; margin-right: 4px;
+      font-size: 15.5px; outline: none; background: #fafdff;
+      box-shadow: 0 1.5px 6px rgba(130,140,180,0.06);
+      font-family: inherit;
     }
-    .summary-bar {
-      font-size: 1.17em;
-      font-weight: 700;
-      min-width: 285px;
-      color: #1E2530;
-      text-align: left;
-      margin: 0.7em 0 1.4em 0;
-      display: flex; flex-wrap: wrap; align-items: center; gap: 40px;
-      letter-spacing: 0.5px;
-    }
-    .starttime-row { display: flex; align-items: center; gap: 11px; }
-    .start-label { font-size: 17px; font-weight: 800; color: #265B7D; margin-right: 3px;}
     .timeline-area-flex {
       display: flex; align-items: flex-start; justify-content: flex-start;
-      background: rgba(255,255,255,0.52); border-radius: 26px;
-      min-height: 125px; margin: 0.2em 0 1.7em 0;
-      box-shadow: 0 3px 25px rgba(65,110,220,0.12);
-      padding: 30px 20px 28px 20px; overflow-x: auto;
-      /* Glass morph reflection 光影 */
-      position: relative;
+      background: rgba(255,255,255,0.36);
+      border-radius: 18px;
+      min-height: 92px;
+      margin: 2em 0 1.5em 0;
+      box-shadow: 0 3.5px 18px rgba(120,140,190,0.07);
+      padding: 18px 14px 16px 18px; overflow-x: auto;
     }
-    .timeline-area { display: flex; flex-wrap: wrap; gap: 20px 15px;}
+    .timeline-area {
+      display: flex; flex-wrap: wrap; gap: 13px 12px;
+    }
     .timeline-block {
       display: inline-flex; flex-direction: column; align-items: center; position: relative;
-      border-radius: 25px; min-width: 122px; max-width: 222px; padding: 12px 15px 18px 15px;
-      font-size: 18px; font-weight: 700; letter-spacing: 0.9px;
-      margin: 0 0 10px 0; margin-right: 0;
-      background: rgba(255,255,255,0.69);
-      box-shadow: 0 3px 26px rgba(80,180,255,0.14), 0 3px 10px rgba(170,180,220,0.13);
-      backdrop-filter: blur(37px) saturate(1.17) brightness(1.07);
-      border: 2.5px solid rgba(255,255,255,0.43);
-      overflow: hidden;
-      position: relative;
-      transition: box-shadow 0.17s;
+      border-radius: 20px;
+      min-width: 108px; max-width: 225px;
+      padding: 12px 15px 13px 15px;
+      font-size: 16.5px; font-weight: 500;
+      letter-spacing: 0.85px;
+      background: var(--glass-bg);
+      box-shadow: var(--glass-shadow);
+      border: 1.2px solid rgba(255,255,255,0.26);
+      backdrop-filter: var(--glass-blur);
+      margin: 0 8px 11px 0;
+      transition: box-shadow 0.15s;
+      z-index:1;
     }
-    .timeline-block.green {
-      background: linear-gradient(114deg, #41df96 70%, #e8fff3 100%);
-      color: #1a4d31;
-      border: 2.5px solid #70fad1;
-      text-shadow: 0 1px 3px rgba(65,200,140,0.04);
-    }
-    .timeline-block.blue {
-      background: linear-gradient(115deg, #4078FF 77%, #ecf2ff 100%);
-      color: #214177;
-      border: 2.5px solid #89beff;
-      text-shadow: 0 1px 3px rgba(55,120,255,0.05);
-    }
-    .timeline-block.gray {
-      background: linear-gradient(115deg, #f6f7fa 79%, #e9ebf1 100%);
-      color: #23272E;
-      border: 2.5px solid #e2e7f4;
-    }
-    .timeline-block.pink {
-      background: linear-gradient(117deg, #FFD7EC 74%, #fff6fa 100%);
-      color: #701A36;
-      border: 2.5px solid #ffa0bf;
-    }
-    .timeline-block.purple-l {
-      background: linear-gradient(114deg, #b9a8ff 67%, #f6f3ff 100%);
-      color: #442C74;
-      border: 2.5px solid #ceb9ff;
-    }
-    .timeline-block.purple-d {
-      background: linear-gradient(112deg, #9d8aff 73%, #e5dbff 100%);
-      color: #fff;
-      border: 2.5px solid #735ae6;
-    }
+    .timeline-block.green   { background: linear-gradient(115deg,rgba(220,255,242,0.52) 85%,rgba(120,211,183,0.27) 100%);}
+    .timeline-block.blue    { background: linear-gradient(115deg,rgba(225,241,255,0.52) 83%,rgba(115,168,255,0.20) 100%);}
+    .timeline-block.gray    { background: linear-gradient(115deg,rgba(237,240,250,0.65) 90%,rgba(180,200,210,0.18) 100%);}
+    .timeline-block.pink    { background: linear-gradient(115deg,rgba(255,234,245,0.63) 88%,rgba(255,176,213,0.16) 100%);}
+    .timeline-block.purple-l{ background: linear-gradient(115deg,rgba(238,235,255,0.59) 92%,rgba(180,158,255,0.17) 100%);}
+    .timeline-block.purple-d{ background: linear-gradient(115deg,rgba(227,224,255,0.60) 91%,rgba(125,111,203,0.13) 100%);}
     .timeline-block .del-btn {
-      position: absolute;
-      top: 12px; right: 14px;
-      background: #FF2D55;
-      color: #fff; border: none; border-radius: 50%;
-      width: 24px; height: 24px; font-size: 17px;
-      line-height: 22px; cursor: pointer; font-weight: 900;
+      position: absolute; top: 7px; right: 7px;
+      background: var(--del-btn);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 18px; height: 18px;
+      font-size: 13px;
+      line-height: 15px;
+      cursor: pointer;
+      font-weight: 900;
+      box-shadow: var(--del-btn-shadow);
+      z-index: 2;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 2.5px 10px rgba(255,50,90,0.15);
-      z-index: 2; opacity: 0.97;
-      transition: background 0.15s, transform 0.13s;
+      transition: background 0.17s, transform 0.12s;
+      outline: none;
     }
-    .timeline-block .del-btn:hover { background: #C90E2A; transform: scale(1.11);}
+    .timeline-block .del-btn:hover {
+      background: var(--del-btn-hover); transform: scale(1.08);
+    }
     .timeline-row-1 {
-      font-weight: 800; font-size: 1.14em; letter-spacing: 1.25px; margin-bottom: 3px;
-      text-align: center; color: #17181A;
-      text-shadow: 0 1px 5px rgba(140,200,255,0.06);
+      font-size: 16.5px; font-weight: 800; letter-spacing: 0.7px;
+      color: #273646; margin-bottom: 1px;
     }
     .timeline-row-2 {
-      font-weight: 500; font-size: 1em; color: #636B80; min-height:20px; margin-bottom: 2.5px;
-      letter-spacing: 1.1px;
+      font-size: 13.3px; font-weight: 500;
+      color: #566177; margin-top: 2px; margin-bottom: 1.5px;
+      letter-spacing: 0.12em;
     }
     .timeline-row-3 {
-      font-weight: 900; font-size: 1.2em; color: #215C8E; letter-spacing: 0.08em;
-      margin-top: 5px; text-align:center;
+      font-size: 20px; font-weight: 900;
+      color: #15273D; letter-spacing: 0.13em; margin-top: 1.5px;
+      text-shadow: 0 1.5px 10px rgba(255,255,255,0.16);
     }
-    @media (max-width:950px){
-      .container {max-width: 100vw; padding-left:4vw; padding-right:4vw;}
-      .timeline-area {gap: 12px 5px;}
-      .timeline-block {min-width:90px; padding:7px 7px 13px 7px;}
+    .summary-bar {
+      font-size: 1.09em; font-weight: 700; letter-spacing: 0.8px; min-width: 255px;
+      color: #384465; text-align: left; margin: 15px 0 10px 0;
+      display: flex; flex-direction: row; align-items: center; gap: 34px;
     }
-    @media (max-width:570px){
-      h1 {font-size:1.27em;}
-      .timeline-block {min-width:78px;}
-      .block-btn {font-size:15px;}
-      .timeline-block .del-btn { width: 18px; height: 18px; font-size: 13px; }
+    .summary-row { margin-bottom: 5px; margin-right: 15px;}
+    .ios-timeline-flexwrap { display: flex; align-items: flex-start; justify-content: space-between;}
+    .starttime-row { display: flex; align-items: center; gap: 8px;}
+    .start-label { font-size: 17px; font-weight: 700; color: #284A6D; margin-right: 2px;}
+    @media (max-width:1000px){
+      .container {max-width: 99vw; padding: 1.5em 1em 1.3em 1em;}
+      .timeline-area-flex {padding-right: 2px;}
+      .ios-timeline-flexwrap { flex-direction: column; }
+      .summary-bar { margin-left: 0; margin-top: 18px;}
+      .starttime-row {justify-content: flex-start;}
+      .timeline-block {min-width:88px;}
     }
   </style>
 </head>
@@ -280,17 +235,18 @@
       <button class="block-btn purple-d" onclick="addTimeBlock('卸貨時間', 30, 'purple-d')">卸貨 30分鐘</button>
       <button class="block-btn purple-d" onclick="addTimeBlock('卸貨時間', 60, 'purple-d')">卸貨 60分鐘</button>
     </div>
-    <div class="label" style="margin-top:1.5em;"></div>
-    <div class="summary-bar" style="margin-bottom: 4px;">
+    <div class="summary-bar" style="margin-top:16px; margin-bottom:16px; justify-content: flex-start;">
       <span class="starttime-row">
         <span class="start-label">出發時間：</span>
-        <input type="time" id="startTime" value="06:00" class="custom-input" style="width:110px;"/>
+        <input type="time" id="startTime" value="06:00" class="custom-input" style="width:100px;"/>
       </span>
       <span class="summary-row" id="endTimeLabel"></span>
       <span class="summary-row" id="workTimeLabel"></span>
     </div>
-    <div class="timeline-area-flex">
-      <div class="timeline-area" id="timeline"></div>
+    <div class="ios-timeline-flexwrap">
+      <div class="timeline-area-flex">
+        <div class="timeline-area" id="timeline"></div>
+      </div>
     </div>
   </div>
   <script>
@@ -318,7 +274,7 @@
         // 刪除按鈕（右上）
         let btn = document.createElement('button');
         btn.className = 'del-btn';
-        btn.innerText = '✕';
+        btn.innerHTML = '&times;';
         btn.onclick = ()=>delBlockAndAfter(i);
         node.appendChild(btn);
 
@@ -392,7 +348,6 @@
       }
       updateTimeline();
     }
-    // 頁面載入時只綁一次
     window.onload = function(){
       document.getElementById('startTime').addEventListener('input', updateTimeline);
       updateTimeline();
