@@ -6,84 +6,101 @@
   <title>運輸時間計算器</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@600;900&display=swap" rel="stylesheet">
   <style>
-    html, body { background: linear-gradient(135deg, #edf2fb 0%, #e8f3fa 100%); margin:0; padding:0; font-family: 'Noto Sans TC', 'San Francisco', 'PingFang TC', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
-    .container { max-width: 950px; margin: 24px auto 16px auto; background: rgba(255,255,255,0.53); border-radius: 22px; box-shadow: 0 8px 32px rgba(30,40,110,0.09), 0 2px 12px rgba(180,190,220,0.08); padding: 2em 1em 1.2em 1em; backdrop-filter: blur(17px) saturate(1.15);}
+    html, body {
+      background: linear-gradient(135deg, #edf2fb 0%, #e8f3fa 100%);
+      margin:0; padding:0;
+      font-family: 'Noto Sans TC', 'San Francisco', 'PingFang TC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    .container {
+      max-width: 950px; margin: 24px auto 16px auto;
+      background: rgba(255,255,255,0.53); border-radius: 22px;
+      box-shadow: 0 8px 32px rgba(30,40,110,0.09), 0 2px 12px rgba(180,190,220,0.08);
+      padding: 2em 1em 1.2em 1em;
+      backdrop-filter: blur(17px) saturate(1.15);
+    }
     h1 { text-align: center; margin-bottom: 1em; letter-spacing: 1.2px; font-size: 2em; font-weight: 600;}
     .label { font-weight: 700; margin: 1.1em 0 0.22em 0; font-size: 1.11em; color: #376387;}
     .section { display: flex; flex-wrap: wrap; gap: 0.44em; margin-bottom: 0.23em;}
-    .block-btn { padding: 7px 15px; font-size: 15.3px; border: none; border-radius: 11px; font-weight: 600; letter-spacing: 1px; margin-bottom: 4px; margin-right: 2px; cursor: pointer; box-shadow: 0 1px 7px rgba(0,0,0,0.06); transition: transform 0.15s, box-shadow 0.19s; backdrop-filter: blur(19px) saturate(1.09); opacity: 0.97;}
+    .block-btn {
+      padding: 7px 15px; font-size: 15.3px; border: none; border-radius: 11px;
+      font-weight: 600; letter-spacing: 1px; margin-bottom: 4px; margin-right: 2px;
+      cursor: pointer; box-shadow: 0 1px 7px rgba(0,0,0,0.06);
+      transition: transform 0.15s, box-shadow 0.19s;
+      backdrop-filter: blur(19px) saturate(1.09); opacity: 0.97;
+    }
     .block-btn:active { transform: scale(0.95);}
     .green { background: #dbf7e4;}
     .pickup { background: #b6e7c8;}
     .drop { background: #b9cdf4;}
     .gray { background: #f3f5f7;}
     .pink { background: #fbeaea;}
-    .timeline-area-flex { display: flex; align-items: flex-start; justify-content: flex-start; background: rgba(251,253,255,0.71); border-radius: 16px; min-height: 88px; margin: 1.8em 0 1.3em 0; box-shadow: 0 1px 7px rgba(130,160,200,0.06); padding: 14px 8px 13px 9px;}
-    .timeline-area { display: flex; flex-wrap: wrap; gap: 13px 9px;}
+
+    /* 資訊列排版（上方資訊） */
+    .info-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 14px; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;
+      padding: 0 2px;
+    }
+    .info-left, .info-right { display: flex; align-items: center; gap: 16px; }
+    .info-select { font-size: 16px; padding: 7px 12px; border-radius: 8px; border: 1px solid #bbc7d2; background: #f9fcff; }
+    .info-label { font-weight: 700; font-size: 1.06em; color: #222; margin-right: 3px; }
+    .info-value { font-weight: 900; font-size: 1.12em; color: #1d3852; }
+
+    /* 時間線區塊縮小30% */
+    .timeline-area-flex {
+      display: flex; align-items: flex-start; justify-content: flex-start;
+      background: rgba(251,253,255,0.71);
+      border-radius: 16px; min-height: 60px;
+      margin: 1.4em 0 1.1em 0;
+      box-shadow: 0 1px 7px rgba(130,160,200,0.06);
+      padding: 8px 4px 8px 6px;
+    }
+    .timeline-area {
+      display: flex; flex-wrap: wrap; gap: 9px 7px;
+    }
     .timeline-block {
       display: flex; flex-direction: column; align-items: center; position: relative;
-      border-radius: 20px; min-width: 132px; max-width: 148px;
-      padding: 13px 7px 11px 7px;
-      font-size: 15.2px; font-weight: 500; letter-spacing: 0.7px;
-      box-shadow: 0 4px 12px 0px rgba(180,220,255,0.15), 0 1.5px 4px rgba(80,140,200,0.07);
-      backdrop-filter: blur(18px) saturate(1.19);
-      margin: 0 0 2px 0; margin-right: 0;
+      border-radius: 16px; min-width: 93px; max-width: 104px;
+      padding: 7px 2px 7px 2px;
+      font-size: 11.2px; font-weight: 500; letter-spacing: 0.6px;
+      box-shadow: 0 2px 7px 0px rgba(180,220,255,0.12), 0 1px 2px rgba(80,140,200,0.06);
+      backdrop-filter: blur(14px) saturate(1.12);
+      margin: 0 0 1.5px 0; margin-right: 0;
       transition: box-shadow 0.17s;
-      border: 1.2px solid rgba(220,220,230,0.22);
-      box-shadow: 0 1.5px 14px 0px rgba(190,220,255,0.14), 0 1.5px 3.5px rgba(100,140,220,0.08);
+      border: 1.1px solid rgba(220,220,230,0.17);
     }
     .timeline-block .del-btn {
-      position: absolute; top: 5px; right: 8px;
+      position: absolute; top: 3px; right: 5px;
       background: none; border: none;
       padding: 0; margin: 0; z-index: 10; cursor: pointer;
-      width: 23px; height: 23px; display: flex; align-items: center; justify-content: center;
+      width: 17px; height: 17px; display: flex; align-items: center; justify-content: center;
       transition: filter 0.18s;
     }
-    .timeline-block .del-btn svg { width:19px; height:19px; display:block; }
+    .timeline-block .del-btn svg { width:13px; height:13px; display:block; }
     .timeline-block .del-btn:hover { filter: brightness(1.2) drop-shadow(0 2px 6px #ff6b81aa);}
     .timeline-row-1 {
-      font-weight: 900; font-size: 20px; margin-top: 2px;
-      color: #263248; letter-spacing: 1px;
-      text-align: center; line-height: 1.15;
+      font-weight: 900; font-size: 14px; margin-top: 2px;
+      color: #263248; letter-spacing: 0.5px;
+      text-align: center; line-height: 1.12;
     }
     .timeline-row-2 {
-      font-weight: 500; font-size: 15px;
-      color: #8da2b6;
-      margin-top: -1px;
-      margin-bottom: -1px;
-      min-height:19px;
-      text-align:center;
-      line-height: 1.16;
+      font-weight: 500; font-size: 10.3px; color: #8da2b6;
+      margin-top: -2px; margin-bottom: -2px; min-height:12px;
+      text-align:center; line-height: 1.10;
     }
-    .timeline-row-2.empty { min-height:19px; }
+    .timeline-row-2.empty { min-height:12px; }
     .timeline-row-3 {
-      font-weight: 900; font-size: 28px; color: #18212B;
-      letter-spacing: 1px; margin-top: 0px; margin-bottom: -2px;
-      text-align:center;
-      line-height: 1.11;
+      font-weight: 900; font-size: 18px; color: #18212B;
+      letter-spacing: 0.8px; margin-top: 0px; margin-bottom: -2px;
+      text-align:center; line-height: 1.05;
     }
-    .custom-input, .select-input { padding: 7px 11px; border-radius: 8px; border: 1px solid #b7cae5; margin-right: 4px; font-size: 15px; outline: none; background: #f8fcfe; box-shadow: 0 1px 3px rgba(110,160,200,0.03);}
-    .bottom-bar {
-      font-size: 1.08em; font-weight: 700; letter-spacing: 0.7px;
-      color: #354753; text-align: right;
-      display: flex; flex-direction: row; align-items: center; justify-content: flex-start;
-      gap: 28px;
-      border-radius: 12px;
-      background: rgba(240,247,255,0.44);
-      padding: 10px 14px 10px 14px;
-      margin-top: 20px;
-      margin-bottom: 12px;
-    }
-    .bottom-bar span { display: flex; align-items: center;}
-    .start-label, .select-label {
-      font-size: 16px; font-weight: 700; color: #336; margin-right: 4px;
-    }
-    .select-input { min-width: 115px;}
+    .custom-input { padding: 6px 10px; border-radius: 8px; border: 1px solid #b7cae5; margin-right: 4px; font-size: 14px; outline: none; background: #f8fcfe; box-shadow: 0 1px 2px rgba(110,160,200,0.02);}
     @media (max-width:900px){
       .container {max-width: 99vw;}
       .timeline-area-flex {padding-right: 2px;}
-      .ios-timeline-flexwrap { flex-direction: column; }
-      .bottom-bar { flex-direction: column; align-items: flex-start; gap: 8px; margin-left: 0; margin-top: 10px; padding: 10px 6px;}
+      .info-row, .info-left, .info-right { flex-wrap: wrap;}
+      .timeline-area { gap: 7px 4px;}
+      .timeline-block { min-width: 80px; max-width: 93px; }
     }
   </style>
 </head>
@@ -104,8 +121,38 @@
     </div>
     <div class="label">卸貨點</div>
     <div class="section" id="dropSection" style="max-width:100%;">
+      <button class="block-btn drop" onclick="addBlock('卸貨點','鹿港銀泰','drop')">鹿港銀泰</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','矽品潭子大','drop')">矽品潭子大</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','矽品潭子大','drop')">矽品潭子小</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','矽品和美一期','drop')">矽品和美一期</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','矽品和美二期','drop')">矽品和美二期</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','友達后里備用','drop')">友達后里</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','環鴻新桶','drop')">環鴻新桶</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','環鴻南崗','drop')">環鴻南崗</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','美光后里','drop')">美光后里</button>
       <button class="block-btn drop" onclick="addBlock('卸貨點','美光AATT','drop')">美光AATT</button>
-      <!-- ... 其餘卸貨點照需求補 ... -->
+      <button class="block-btn drop" onclick="addBlock('卸貨點','美光FBT','drop')">美光FBT</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','展頌斗六','drop')">展頌斗六</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','展頌竹山','drop')">展頌竹山</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','矽品潭子小','drop')">矽品潭子小</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','晉椿','drop')">晉椿</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','松和50N','drop')">松和50N</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','久允工業','drop')">久允工業</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','明基材料','drop')">明基材料</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','艾杰旭一期','drop')">艾杰旭一期</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','菱生中港','drop')">菱生中港</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','菱生2廠','drop')">菱生2廠</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','菱生5廠','drop')">菱生5廠</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','菱生1廠','drop')">菱生1廠</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','超豐頭份','drop')">超豐頭份</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','烏日啤酒','drop')">烏日啤酒</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','中油台中80N','drop')">中油台中80N</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','台灣特品','drop')">台灣特品</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','台大氣體','drop')">台大氣體</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','巨菱精密','drop')">巨菱精密</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','亞洲光學','drop')">亞洲光學</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','隆達竹南廠','drop')">隆達竹南廠</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','旺宏新竹735A','drop')">旺宏新竹735A</button>
       <input type="text" id="dropInput" class="custom-input" placeholder="手動輸入"/>
       <button class="block-btn drop" onclick="addCustomBlock('卸貨點')">新增</button>
     </div>
@@ -130,26 +177,28 @@
       <button class="block-btn drop" onclick="addTimeBlock('卸貨時間', 30, 'drop')">卸貨 30分鐘</button>
       <button class="block-btn drop" onclick="addTimeBlock('卸貨時間', 60, 'drop')">卸貨 60分鐘</button>
     </div>
-    <!-- 槽車號碼選單/出發時間/回場時間/總工時，全部同一橫列，下方動態區塊上方 -->
-    <div class="bottom-bar">
-      <span>
-        <span class="select-label">槽車號碼：</span>
-        <select id="trailerNo" class="select-input">
+
+    <!-- 資訊列：槽車號碼＋出發時間　與　預計回場時間＋總工時 -->
+    <div class="info-row">
+      <div class="info-left">
+        <span class="info-label">槽車號碼：</span>
+        <select id="trailerSelect" class="info-select">
           <option value="51V841_275">51V841_275</option>
           <option value="51V836_270">51V836_270</option>
         </select>
-      </span>
-      <span>
-        <span class="start-label">出發時間：</span>
-        <input type="time" id="startTime" value="06:00" class="custom-input" style="width:100px;"/>
-      </span>
-      <span id="endTimeLabel"></span>
-      <span id="workTimeLabel"></span>
-    </div>
-    <div class="ios-timeline-flexwrap">
-      <div class="timeline-area-flex">
-        <div class="timeline-area" id="timeline"></div>
+        <span class="info-label">出發時間：</span>
+        <input type="time" id="startTime" value="06:00" class="custom-input" style="width:90px;"/>
       </div>
+      <div class="info-right">
+        <span class="info-label">預計回場時間：</span>
+        <span class="info-value" id="endTimeLabel"></span>
+        <span class="info-label">總工時：</span>
+        <span class="info-value" id="workTimeLabel"></span>
+      </div>
+    </div>
+    <!-- 動態區塊 -->
+    <div class="timeline-area-flex">
+      <div class="timeline-area" id="timeline"></div>
     </div>
   </div>
   <script>
@@ -168,12 +217,10 @@
       let [h, m] = startStr.split(':').map(x=>parseInt(x,10));
       let nowMin = h*60 + m;
       let timeNow = nowMin;
-
       for(let i=0;i<timelineData.length;i++) {
         const block = timelineData[i];
         const node = document.createElement('div');
         node.className = 'timeline-block '+block.color;
-
         // 刪除按鈕（右上）
         let btn = document.createElement('button');
         btn.className = 'del-btn';
@@ -181,7 +228,6 @@
         btn.innerHTML = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" fill="#ff355b" /><path d="M8.6 8.6l6.8 6.8M15.4 8.6l-6.8 6.8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>`;
         btn.onclick = ()=>delBlockAndAfter(i);
         node.appendChild(btn);
-
         // 第一行
         let row1 = document.createElement('div');
         row1.className = 'timeline-row-1';
@@ -190,7 +236,6 @@
         else if(block.type==='等待') row1.innerText = '等待';
         else if(block.type==='提貨時間') row1.innerText = '提貨時間';
         else if(block.type==='卸貨時間') row1.innerText = '卸貨時間';
-
         // 第二行
         let row2 = document.createElement('div');
         row2.className = 'timeline-row-2';
@@ -198,9 +243,8 @@
           row2.innerText = toHHMM(block.minute);
         } else {
           row2.className += ' empty';
-          row2.innerText = '\u00A0';
+          row2.innerText = '\u00A0'; // 空白
         }
-
         // 第三行
         let row3 = document.createElement('div');
         row3.className = 'timeline-row-3';
@@ -214,7 +258,6 @@
         node.appendChild(row2);
         node.appendChild(row3);
         timeline.appendChild(node);
-
         if(['路程','等待','提貨時間','卸貨時間'].includes(block.type)) totalMin += block.minute;
       }
       // 總結
@@ -222,8 +265,8 @@
       let endMins = nowMin + totalMin;
       let eh = Math.floor(endMins/60)%24, em = endMins%60;
       let endStr = `${eh.toString().padStart(2,'0')}:${em.toString().padStart(2,'0')}`;
-      document.getElementById('endTimeLabel').innerHTML = `預計回場時間：${endStr}`;
-      document.getElementById('workTimeLabel').innerHTML = `總工時：${totalMin} 分鐘｜${minStr}`;
+      document.getElementById('endTimeLabel').innerText = endStr;
+      document.getElementById('workTimeLabel').innerText = `${totalMin} 分鐘｜${minStr}`;
     }
     function delBlockAndAfter(idx) {
       timelineData = timelineData.slice(0, idx);
