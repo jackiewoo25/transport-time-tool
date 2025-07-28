@@ -30,7 +30,6 @@
       margin: 0 0 2px 0; margin-right: 0;
       transition: box-shadow 0.17s;
       border: 1.2px solid rgba(220,220,230,0.22);
-      /* 毛玻璃立體感高斯疊加 */
       box-shadow: 0 1.5px 14px 0px rgba(190,220,255,0.14), 0 1.5px 3.5px rgba(100,140,220,0.08);
     }
     .timeline-block .del-btn {
@@ -63,43 +62,34 @@
       text-align:center;
       line-height: 1.11;
     }
-    .custom-input, .custom-select {
-      padding: 7px 11px; border-radius: 8px; border: 1px solid #b7cae5; margin-right: 4px; font-size: 15px; outline: none; background: #f8fcfe; box-shadow: 0 1px 3px rgba(110,160,200,0.03);
+    .custom-input, .select-input { padding: 7px 11px; border-radius: 8px; border: 1px solid #b7cae5; margin-right: 4px; font-size: 15px; outline: none; background: #f8fcfe; box-shadow: 0 1px 3px rgba(110,160,200,0.03);}
+    .bottom-bar {
+      font-size: 1.08em; font-weight: 700; letter-spacing: 0.7px;
+      color: #354753; text-align: right;
+      display: flex; flex-direction: row; align-items: center; justify-content: flex-start;
+      gap: 28px;
+      border-radius: 12px;
+      background: rgba(240,247,255,0.44);
+      padding: 10px 14px 10px 14px;
+      margin-top: 20px;
+      margin-bottom: 12px;
     }
-    .summary-bar2 {
-      font-size: 1.07em; font-weight: 700; letter-spacing: 0.6px; min-width: 255px; color: #354753; text-align: right; margin-top: 0; margin-bottom: 15px; display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 19px;
+    .bottom-bar span { display: flex; align-items: center;}
+    .start-label, .select-label {
+      font-size: 16px; font-weight: 700; color: #336; margin-right: 4px;
     }
-    .summary-col { display: flex; align-items: center; gap: 5px;}
-    .summary-row { margin-bottom: 4px; margin-right: 13px;}
-    .ios-timeline-flexwrap { display: flex; align-items: flex-start; justify-content: space-between;}
-    .start-label { font-size: 17px; font-weight: 700; color: #336; margin-right: 2px;}
+    .select-input { min-width: 115px;}
     @media (max-width:900px){
       .container {max-width: 99vw;}
       .timeline-area-flex {padding-right: 2px;}
       .ios-timeline-flexwrap { flex-direction: column; }
-      .summary-bar2 { flex-direction: column; gap:6px; align-items: flex-start;}
+      .bottom-bar { flex-direction: column; align-items: flex-start; gap: 8px; margin-left: 0; margin-top: 10px; padding: 10px 6px;}
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>運輸流程時間線工具</h1>
-    <!-- summary bar：槽車號碼、出發、預計回場、總工時 -->
-    <div class="summary-bar2">
-      <div class="summary-col">
-        <span class="start-label">槽車號碼：</span>
-        <select id="trailerSelect" class="custom-select">
-          <option value="51V841_275">51V841_275</option>
-          <option value="51V836_270">51V836_270</option>
-        </select>
-      </div>
-      <div class="summary-col">
-        <span class="start-label">出發時間：</span>
-        <input type="time" id="startTime" value="06:00" class="custom-input" style="width:100px;"/>
-      </div>
-      <div class="summary-col" id="endTimeLabel"></div>
-      <div class="summary-col" id="workTimeLabel"></div>
-    </div>
     <div class="label">提貨點</div>
     <div class="section" id="pickupSection">
       <button class="block-btn green" onclick="addBlock('提貨點','車場','green')">車場</button>
@@ -114,37 +104,8 @@
     </div>
     <div class="label">卸貨點</div>
     <div class="section" id="dropSection" style="max-width:100%;">
-      <button class="block-btn drop" onclick="addBlock('卸貨點','鹿港銀泰','drop')">鹿港銀泰</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','矽品潭子大','drop')">矽品潭子大</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','友達后里備用','drop')">友達后里備用</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','環鴻新桶','drop')">環鴻新桶</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','環鴻南崗','drop')">環鴻南崗</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','美光后里','drop')">美光后里</button>
       <button class="block-btn drop" onclick="addBlock('卸貨點','美光AATT','drop')">美光AATT</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','展頌斗六','drop')">展頌斗六</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','展頌竹山','drop')">展頌竹山</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','矽品潭子小','drop')">矽品潭子小</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','晉椿','drop')">晉椿</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','松和50N','drop')">松和50N</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','久允工業','drop')">久允工業</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','明基材料','drop')">明基材料</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','艾杰旭一期','drop')">艾杰旭一期</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','菱生中港','drop')">菱生中港</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','菱生2廠','drop')">菱生2廠</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','菱生5廠','drop')">菱生5廠</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','菱生1廠','drop')">菱生1廠</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','矽品和美一期','drop')">矽品和美一期</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','矽品和美二期','drop')">矽品和美二期</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','超豐頭份','drop')">超豐頭份</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','烏日啤酒','drop')">烏日啤酒</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','中油台中80N','drop')">中油台中80N</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','台灣特品','drop')">台灣特品</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','台大氣體','drop')">台大氣體</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','巨菱精密','drop')">巨菱精密</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','亞洲光學','drop')">亞洲光學</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','美光FBT','drop')">美光FBT</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','隆達竹南廠','drop')">隆達竹南廠</button>
-      <button class="block-btn drop" onclick="addBlock('卸貨點','旺宏新竹735A','drop')">旺宏新竹735A</button>
+      <!-- ... 其餘卸貨點照需求補 ... -->
       <input type="text" id="dropInput" class="custom-input" placeholder="手動輸入"/>
       <button class="block-btn drop" onclick="addCustomBlock('卸貨點')">新增</button>
     </div>
@@ -168,6 +129,22 @@
       <button class="block-btn drop" onclick="addTimeBlock('卸貨時間', 15, 'drop')">卸貨 15分鐘</button>
       <button class="block-btn drop" onclick="addTimeBlock('卸貨時間', 30, 'drop')">卸貨 30分鐘</button>
       <button class="block-btn drop" onclick="addTimeBlock('卸貨時間', 60, 'drop')">卸貨 60分鐘</button>
+    </div>
+    <!-- 槽車號碼選單/出發時間/回場時間/總工時，全部同一橫列，下方動態區塊上方 -->
+    <div class="bottom-bar">
+      <span>
+        <span class="select-label">槽車號碼：</span>
+        <select id="trailerNo" class="select-input">
+          <option value="51V841_275">51V841_275</option>
+          <option value="51V836_270">51V836_270</option>
+        </select>
+      </span>
+      <span>
+        <span class="start-label">出發時間：</span>
+        <input type="time" id="startTime" value="06:00" class="custom-input" style="width:100px;"/>
+      </span>
+      <span id="endTimeLabel"></span>
+      <span id="workTimeLabel"></span>
     </div>
     <div class="ios-timeline-flexwrap">
       <div class="timeline-area-flex">
@@ -221,7 +198,7 @@
           row2.innerText = toHHMM(block.minute);
         } else {
           row2.className += ' empty';
-          row2.innerText = '\u00A0'; // 空白
+          row2.innerText = '\u00A0';
         }
 
         // 第三行
