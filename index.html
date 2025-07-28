@@ -6,174 +6,67 @@
   <title>運輸流程時間線工具</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@700;900&display=swap" rel="stylesheet">
   <style>
-    html, body {
-      background: linear-gradient(135deg, #ecf3fa 0%, #f7fbff 100%);
-      margin: 0; padding: 0;
-      font-family: 'Noto Sans TC', 'San Francisco', 'PingFang TC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      color: #17223b;
-    }
-    .container {
-      max-width: 980px;
-      margin: 26px auto 18px auto;
-      background: rgba(255,255,255,0.54);
-      border-radius: 30px;
-      box-shadow: 0 8px 32px rgba(64,90,160,0.09), 0 1.5px 8px rgba(150,170,200,0.13);
-      padding: 2.2em 1.3em 1.5em 1.3em;
-      backdrop-filter: blur(20px) saturate(1.13);
-    }
-    h1 {
-      text-align: center; margin-bottom: 1.1em;
-      letter-spacing: 1.1px;
-      font-size: 2.15em;
-      font-weight: 700;
-      color: #212843;
-      text-shadow: 0 4px 24px #e1eaff3d;
-    }
-    .label {
-      font-weight: 700;
-      margin: 1.15em 0 0.18em 0;
-      font-size: 1.07em;
-      color: #4262af;
-      letter-spacing: 0.5px;
-    }
-    .section {
-      display: flex; flex-wrap: wrap; gap: 0.57em;
-      margin-bottom: 0.3em;
-    }
-    .block-btn {
-      padding: 8px 19px; font-size: 16px;
-      border: none; border-radius: 14px;
-      font-weight: 700;
-      letter-spacing: 1px; margin-bottom: 7px; margin-right: 3px;
-      cursor: pointer;
-      box-shadow: 0 1px 7px rgba(0,0,0,0.07);
-      transition: transform 0.15s, box-shadow 0.20s;
-      backdrop-filter: blur(14px) saturate(1.13);
-      opacity: 0.97;
-    }
-    .block-btn:active { transform: scale(0.96);}
-    /* 方塊配色（Apple Liquid Glass風格） */
-    .green { background: rgba(215,245,222,0.80); color: #1d3b28; }
-    .green-t { background: rgba(206,237,219,0.68); color: #215737;}
-    .blue { background: rgba(207,225,252,0.90); color: #2e4263;}
-    .blue-t { background: rgba(192,212,244,0.70); color: #2c3850;}
-    .gray { background: rgba(245,247,250,0.82); color: #222;}
-    .pink { background: rgba(255,219,230,0.85); color: #882554;}
-    .input-btn { background: #f3f6fb; border: 1px solid #bed0e8; border-radius: 9px; font-size: 15px; }
-    /* 提/卸貨時間同色系 */
-    .timeline-block.green-t { background: linear-gradient(150deg, #e0f8ec 80%, #dafbe9 100%);}
-    .timeline-block.blue-t  { background: linear-gradient(150deg, #e2ecfb 80%, #d5e8fd 100%);}
-    /* 流程區容器 */
-    .timeline-area-flex {
-      display: flex; align-items: flex-start; justify-content: flex-start;
-      background: rgba(255,255,255,0.68);
-      border-radius: 23px;
-      min-height: 130px;
-      margin: 2em 0 1.6em 0;
-      box-shadow: 0 2px 18px rgba(120,140,190,0.14);
-      padding: 22px 14px 22px 16px;
-      overflow-x: hidden;
-      width: 100%;
-    }
-    .timeline-area {
-      display: flex; flex-wrap: wrap; gap: 23px 16px;
-      width: 100%;
-      justify-content: flex-start;
-    }
-    /* timeline方塊 */
-    .timeline-block {
-      display: flex; flex-direction: column; align-items: center;
-      position: relative;
-      border-radius: 19px;
-      min-width: 168px; max-width: 210px;
-      padding: 11px 10px 13px 10px;
-      background: rgba(255,255,255,0.63);
-      box-shadow: 0 2px 14px rgba(140,160,170,0.10);
-      margin: 0; transition: box-shadow 0.15s;
-    }
-    /* 刪除icon */
-    .timeline-block .del-btn {
-      position: absolute;
-      top: 12px; right: 15px;
-      background: #ff3957;
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 27px; height: 27px;
-      font-size: 20px;
-      line-height: 26px;
-      cursor: pointer; font-weight: bold;
-      padding: 0;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 1.5px 5px rgba(255,20,60,0.06);
-      transition: background 0.13s, transform 0.10s;
-      z-index: 3;
-    }
-    .timeline-block .del-btn:hover { background: #d81932; }
-    /* 內容對齊 */
-    .timeline-row-1 {
-      font-weight: 900; font-size: 23px;
-      letter-spacing: 1px; margin-bottom: 0px;
-      margin-top: 2px;
-      width: 100%; text-align: center;
-    }
-    .timeline-row-2 {
-      font-weight: 600; font-size: 17px; margin-top: -5px;
-      color: #86a0b8; min-height: 17px;
-      letter-spacing: 1px;
-      text-align: center;
-    }
-    .timeline-row-3 {
-      font-weight: 900; font-size: 32px;
-      color: #192738; letter-spacing: 2px;
-      margin-top: -2px;
-      width: 100%; text-align: center;
-    }
-    /* 時間欄位&摘要 */
-    .summary-bar {
-      font-size: 1.18em; font-weight: 700;
-      letter-spacing: 1px; min-width: 255px;
-      color: #28303f;
-      text-align: left; margin-top: 8px;
-      display: flex; flex-direction: row; align-items: center;
-      justify-content: flex-start; gap: 30px;
-      margin-bottom: 5px;
-    }
-    .summary-row { margin-bottom: 5px; margin-right: 16px;}
+    html, body { background: linear-gradient(135deg, #e9eef7 0%, #f6f9fe 100%); margin:0; padding:0; font-family: 'Noto Sans TC', 'San Francisco', 'PingFang TC', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+    .container { max-width: 980px; margin: 28px auto 18px auto; background: rgba(255,255,255,0.55); border-radius: 22px; box-shadow: 0 8px 32px rgba(30,40,110,0.07), 0 1.5px 8px rgba(180,190,220,0.09); padding: 2.1em 1.5em 1.2em 1.5em; backdrop-filter: blur(20px) saturate(1.25);}
+    h1 { text-align: center; margin-bottom: 1.1em; letter-spacing: 1.2px; font-size: 2em; font-weight: 700;}
+    .label { font-weight: 700; margin: 1.2em 0 0.2em 0; font-size: 1.1em; color: #457175;}
+    .section { display: flex; flex-wrap: wrap; gap: 0.45em; margin-bottom: 0.3em;}
+    .block-btn { padding: 8px 17px; font-size: 15.5px; border: none; border-radius: 13px; font-weight: 700; letter-spacing: 1px; margin-bottom: 6px; margin-right: 3px; cursor: pointer; box-shadow: 0 1px 7px rgba(0,0,0,0.05); transition: transform 0.14s, box-shadow 0.19s; backdrop-filter: blur(20px) saturate(1.10); opacity: 0.98;}
+    .block-btn:active { transform: scale(0.95);}
+    .pickup { background: rgba(219,247,228,0.88); color: #255e3e;}        /* 淡綠/提貨點 */
+    .pickup-t { background: rgba(182,231,200,0.92); color: #255e3e;}     /* 提貨時間-較深綠 */
+    .drop { background: rgba(215,232,250,0.92); color: #1c3957;}         /* 淡藍/卸貨點 */
+    .drop-t { background: rgba(185,205,244,0.95); color: #1c3957;}       /* 卸貨時間-較深藍 */
+    .gray { background: rgba(245,247,251,0.89); color: #1e2a31;}
+    .pink { background: rgba(255,209,229,0.83); color: #8c354a;}
+    .timeline-area-flex { background: rgba(248,252,255,0.66); border-radius: 16px; min-height: 110px; margin: 2em 0 1.2em 0; box-shadow: 0 1px 7px rgba(120,140,190,0.07); padding: 15px 11px 15px 11px;}
+    .timeline-area { display: flex; flex-wrap: wrap; gap: 22px 18px;}
+    .timeline-block { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; position: relative; border-radius: 24px; min-width: 190px; max-width: 210px; min-height: 110px; box-shadow: 0 2px 12px rgba(120,150,170,0.09); padding: 18px 17px 18px 23px; margin: 0; font-size: 16.5px; font-weight: 700; letter-spacing: 0.8px; background: inherit;}
+    .timeline-block .del-btn { position: absolute; top: 12px; right: 13px; background: #ff3a4b; color: #fff; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 22px; line-height: 29px; cursor: pointer; font-weight: bold; padding: 0; display: flex; align-items: center; justify-content: center; box-shadow: 0 0.5px 2px rgba(180,0,0,0.12); z-index: 2; transition: box-shadow 0.15s;}
+    .timeline-block .del-btn:hover { background: #b50d22;}
+    .timeline-row-1 { font-weight: 900; font-size: 1.4em; margin-bottom: 3px; }
+    .timeline-row-2 { font-weight: 700; font-size: 1.09em; margin-bottom: 3px; color: #8d99a7;}
+    .timeline-row-3 { font-weight: 900; font-size: 2.15em; color: #19232f; margin-bottom: 1px; letter-spacing: 1.5px;}
+    .custom-input { padding: 7px 12px; border-radius: 8px; border: 1px solid #bbc7d2; margin-right: 4px; font-size: 15px; outline: none; background: #f9fcff; box-shadow: 0 1px 4px rgba(110,160,200,0.03);}
+    .summary-bar { font-size: 1.13em; font-weight: 800; letter-spacing: 1.1px; min-width: 255px; color: #1c2b33; text-align: left; margin: 16px 0 8px 0; display: flex; flex-direction: row; align-items: center; gap: 35px; flex-wrap: wrap;}
+    .summary-row {margin-bottom: 5px;}
     .starttime-row { display: flex; align-items: center; gap: 8px;}
-    .start-label { font-size: 19px; font-weight: 700; color: #344;}
-    /* 輸入框 */
-    .custom-input { padding: 7px 14px; border-radius: 9px; border: 1px solid #bbc7d2;
-      margin-right: 4px; font-size: 16px; outline: none;
-      background: #f9fcff; box-shadow: 0 1px 5px rgba(110,160,200,0.04);}
-    @media (max-width:950px){
-      .container {max-width: 100vw;}
-      .timeline-block { min-width: 145px; max-width: 180px;}
-      .timeline-area {gap: 14px 7px;}
+    .start-label { font-size: 16px; font-weight: 700; color: #313a48; margin-right: 2px;}
+    @media (max-width:1100px){
+      .container {max-width:99vw;}
+      .timeline-area-flex {padding-right: 4px;}
+      .timeline-block {min-width:130px; max-width:99vw;}
+      .timeline-area {gap:18px 9px;}
     }
-    @media (max-width:600px){
-      .container {padding: 1em 1vw;}
-      .timeline-block { min-width: 95vw; max-width: 97vw;}
-      .timeline-row-1 {font-size: 19px;}
-      .timeline-row-2 {font-size: 14px;}
-      .timeline-row-3 {font-size: 24px;}
+    @media (max-width:800px){
+      .timeline-block {min-width:92vw;max-width:98vw;}
+      .timeline-area {gap:8px 7px;}
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>運輸流程時間線工具</h1>
+    <div class="label">提貨/卸貨時間</div>
+    <div class="section">
+      <button class="block-btn pickup-t" onclick="addTimeBlock('提貨時間', 15, 'pickup-t')">提貨 15分鐘</button>
+      <button class="block-btn pickup-t" onclick="addTimeBlock('提貨時間', 30, 'pickup-t')">提貨 30分鐘</button>
+      <button class="block-btn pickup-t" onclick="addTimeBlock('提貨時間', 60, 'pickup-t')">提貨 60分鐘</button>
+      <button class="block-btn drop-t" onclick="addTimeBlock('卸貨時間', 15, 'drop-t')">卸貨 15分鐘</button>
+      <button class="block-btn drop-t" onclick="addTimeBlock('卸貨時間', 30, 'drop-t')">卸貨 30分鐘</button>
+      <button class="block-btn drop-t" onclick="addTimeBlock('卸貨時間', 60, 'drop-t')">卸貨 60分鐘</button>
+    </div>
     <div class="label">提貨點</div>
     <div class="section" id="pickupSection">
-      <button class="block-btn green" onclick="addBlock('提貨點','車場','green')">車場</button>
-      <button class="block-btn green" onclick="addBlock('提貨點','重車','green')">重車</button>
-      <button class="block-btn green" onclick="addBlock('提貨點','BOIG','green')">BOIG</button>
-      <button class="block-btn green" onclick="addBlock('提貨點','KY2','green')">KY2</button>
-      <button class="block-btn green" onclick="addBlock('提貨點','KY3','green')">KY3</button>
-      <button class="block-btn green" onclick="addBlock('提貨點','NK','green')">NK</button>
-      <button class="block-btn green" onclick="addBlock('提貨點','KK','green')">KK</button>
+      <button class="block-btn pickup" onclick="addBlock('提貨點','車場','pickup')">車場</button>
+      <button class="block-btn pickup" onclick="addBlock('提貨點','重車','pickup')">重車</button>
+      <button class="block-btn pickup" onclick="addBlock('提貨點','BOIG','pickup')">BOIG</button>
+      <button class="block-btn pickup" onclick="addBlock('提貨點','KY2','pickup')">KY2</button>
+      <button class="block-btn pickup" onclick="addBlock('提貨點','KY3','pickup')">KY3</button>
+      <button class="block-btn pickup" onclick="addBlock('提貨點','NK','pickup')">NK</button>
+      <button class="block-btn pickup" onclick="addBlock('提貨點','KK','pickup')">KK</button>
       <input type="text" id="pickupInput" class="custom-input" placeholder="手動輸入"/>
-      <button class="block-btn green" onclick="addCustomBlock('提貨點')">新增</button>
+      <button class="block-btn pickup" onclick="addCustomBlock('提貨點')">新增</button>
     </div>
     <div class="label">卸貨點</div>
     <div class="section" id="dropSection">
@@ -208,8 +101,9 @@
       <button class="block-btn blue" onclick="addBlock('卸貨點','美光FBT','blue')">美光FBT</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','隆達竹南廠','blue')">隆達竹南廠</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','旺宏新竹735A','blue')">旺宏新竹735A</button>
+      <!-- 你可以依實際需求加入更多卸貨點... -->
       <input type="text" id="dropInput" class="custom-input" placeholder="手動輸入"/>
-      <button class="block-btn blue" onclick="addCustomBlock('卸貨點')">新增</button>
+      <button class="block-btn drop" onclick="addCustomBlock('卸貨點')">新增</button>
     </div>
     <div class="label">路程時間</div>
     <div class="section">
@@ -222,15 +116,6 @@
       <button class="block-btn pink" onclick="addTimeBlock('等待', 15, 'pink')">15分鐘</button>
       <button class="block-btn pink" onclick="addTimeBlock('等待', 30, 'pink')">30分鐘</button>
       <button class="block-btn pink" onclick="addTimeBlock('等待', 60, 'pink')">60分鐘</button>
-    </div>
-    <div class="label">提貨/卸貨時間</div>
-    <div class="section">
-      <button class="block-btn green-t" onclick="addTimeBlock('提貨時間', 15, 'green-t')">提貨 15分鐘</button>
-      <button class="block-btn green-t" onclick="addTimeBlock('提貨時間', 30, 'green-t')">提貨 30分鐘</button>
-      <button class="block-btn green-t" onclick="addTimeBlock('提貨時間', 60, 'green-t')">提貨 60分鐘</button>
-      <button class="block-btn blue-t" onclick="addTimeBlock('卸貨時間', 15, 'blue-t')">卸貨 15分鐘</button>
-      <button class="block-btn blue-t" onclick="addTimeBlock('卸貨時間', 30, 'blue-t')">卸貨 30分鐘</button>
-      <button class="block-btn blue-t" onclick="addTimeBlock('卸貨時間', 60, 'blue-t')">卸貨 60分鐘</button>
     </div>
     <div class="summary-bar">
       <span class="starttime-row">
@@ -276,11 +161,12 @@
         // 第一行：標題或地點
         let row1 = document.createElement('div');
         row1.className = 'timeline-row-1';
-        if(block.type==='提貨點'||block.type==='卸貨點') row1.innerText = block.label;
+        if(block.type==='提貨點') row1.innerText = block.label;
+        else if(block.type==='提貨時間') row1.innerText = '提貨時間';
+        else if(block.type==='卸貨點') row1.innerText = block.label;
+        else if(block.type==='卸貨時間') row1.innerText = '卸貨時間';
         else if(block.type==='路程') row1.innerHTML = '路程 ➜';
         else if(block.type==='等待') row1.innerText = '等待';
-        else if(block.type==='提貨時間') row1.innerText = '提貨時間';
-        else if(block.type==='卸貨時間') row1.innerText = '卸貨時間';
 
         // 第二行：該方塊所需時間
         let row2 = document.createElement('div');
@@ -326,7 +212,7 @@
     }
     function addCustomBlock(type) {
       let inputId = (type === '提貨點') ? 'pickupInput' : 'dropInput';
-      let color = (type === '提貨點') ? 'green' : 'blue';
+      let color = (type === '提貨點') ? 'pickup' : 'drop';
       let txt = document.getElementById(inputId).value.trim();
       if (!txt) return;
       addBlock(type, txt, color);
