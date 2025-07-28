@@ -13,50 +13,54 @@
     .section { display: flex; flex-wrap: wrap; gap: 0.44em; margin-bottom: 0.23em;}
     .block-btn { padding: 7px 15px; font-size: 15.3px; border: none; border-radius: 11px; font-weight: 600; letter-spacing: 1px; margin-bottom: 4px; margin-right: 2px; cursor: pointer; box-shadow: 0 1px 7px rgba(0,0,0,0.06); transition: transform 0.15s, box-shadow 0.19s; backdrop-filter: blur(19px) saturate(1.09); opacity: 0.97;}
     .block-btn:active { transform: scale(0.95);}
-    .green { background: #DFF8EC; color: #255e3e;}    /* 提貨點：淡綠 */
-    .green-t { background: #BCEAD6; color: #255e3e;}  /* 提貨時間：深綠 */
-    .blue { background: #DCEAFE; color: #1c3957;}     /* 卸貨點：淡藍 */
-    .blue-t { background: #BAD0FB; color: #1c3957;}   /* 卸貨時間：深藍 */
-    .gray { background: #F3F5F7; color: #1e2a31;}     /* 路程：柔霧灰 */
-    .pink { background: #FBEAEA; color: #8c354a;}      /* 等待：淡粉紅 */
+    .green { background: #dbf7e4;}
+    .pickup { background: #b6e7c8;}
+    .drop { background: #b9cdf4;}
+    .gray { background: #f3f5f7;}
+    .pink { background: #fbeaea;}
     .timeline-area-flex { display: flex; align-items: flex-start; justify-content: flex-start; background: rgba(251,253,255,0.71); border-radius: 16px; min-height: 88px; margin: 1.8em 0 1.3em 0; box-shadow: 0 1px 7px rgba(130,160,200,0.06); padding: 14px 8px 13px 9px;}
-    .timeline-area { display: flex; flex-wrap: wrap; gap: 14px 11px;}
+    .timeline-area { display: flex; flex-wrap: wrap; gap: 13px 9px;}
     .timeline-block {
       display: flex; flex-direction: column; align-items: center; position: relative;
-      border-radius: 18px; min-width: 135px; max-width: 154px;
+      border-radius: 20px; min-width: 132px; max-width: 148px;
       padding: 13px 7px 11px 7px;
       font-size: 15.2px; font-weight: 500; letter-spacing: 0.7px;
-      box-shadow: 0 4px 12px 0px rgba(180,220,255,0.12), 0 1.5px 4px rgba(80,140,200,0.07);
+      box-shadow: 0 4px 12px 0px rgba(180,220,255,0.15), 0 1.5px 4px rgba(80,140,200,0.07);
       backdrop-filter: blur(18px) saturate(1.19);
       margin: 0 0 2px 0; margin-right: 0;
       transition: box-shadow 0.17s;
-      border: 1.3px solid rgba(220,220,230,0.17);
+      border: 1.2px solid rgba(220,220,230,0.22);
+      box-shadow: 0 1.5px 14px 0px rgba(190,220,255,0.14), 0 1.5px 3.5px rgba(100,140,220,0.08);
     }
     .timeline-block .del-btn {
-      position: absolute; top: 6px; right: 9px;
-      background: none; border: none; padding: 0; margin: 0; z-index: 10; cursor: pointer;
-      width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
-      transition: filter 0.16s;
+      position: absolute; top: 5px; right: 8px;
+      background: none; border: none;
+      padding: 0; margin: 0; z-index: 10; cursor: pointer;
+      width: 23px; height: 23px; display: flex; align-items: center; justify-content: center;
+      transition: filter 0.18s;
     }
-    .timeline-block .del-btn svg { width:18px; height:18px; display:block; }
+    .timeline-block .del-btn svg { width:19px; height:19px; display:block; }
     .timeline-block .del-btn:hover { filter: brightness(1.2) drop-shadow(0 2px 6px #ff6b81aa);}
     .timeline-row-1 {
-      font-weight: 900; font-size: 19px; margin-top: 2px;
+      font-weight: 900; font-size: 20px; margin-top: 2px;
       color: #263248; letter-spacing: 1px;
-      text-align: center; line-height: 1.14;
+      text-align: center; line-height: 1.15;
     }
     .timeline-row-2 {
       font-weight: 500; font-size: 15px;
       color: #8da2b6;
-      margin-top: -2px; margin-bottom: -2px;
+      margin-top: -1px;
+      margin-bottom: -1px;
       min-height:19px;
-      text-align:center; line-height: 1.14;
+      text-align:center;
+      line-height: 1.16;
     }
     .timeline-row-2.empty { min-height:19px; }
     .timeline-row-3 {
-      font-weight: 900; font-size: 27px; color: #18212B;
-      letter-spacing: 1px; margin-top: 0px; margin-bottom: -1px;
-      text-align:center; line-height: 1.10;
+      font-weight: 900; font-size: 28px; color: #18212B;
+      letter-spacing: 1px; margin-top: 0px; margin-bottom: -2px;
+      text-align:center;
+      line-height: 1.11;
     }
     .custom-input { padding: 7px 11px; border-radius: 8px; border: 1px solid #b7cae5; margin-right: 4px; font-size: 15px; outline: none; background: #f8fcfe; box-shadow: 0 1px 3px rgba(110,160,200,0.03);}
     .summary-bar { font-size: 1.11em; font-weight: 700; letter-spacing: 0.7px; min-width: 255px; color: #354753; text-align: right; margin-top: 5px; display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 21px;}
@@ -80,19 +84,20 @@
     <div class="section" id="pickupSection">
       <button class="block-btn green" onclick="addBlock('提貨點','車場','green')">車場</button>
       <button class="block-btn green" onclick="addBlock('提貨點','重車','green')">重車</button>
-      <button class="block-btn green" onclick="addBlock('提貨點','BOIG','green')">BOIG</button>
-      <button class="block-btn green" onclick="addBlock('提貨點','KY2','green')">KY2</button>
-      <button class="block-btn green" onclick="addBlock('提貨點','KY3','green')">KY3</button>
-      <button class="block-btn green" onclick="addBlock('提貨點','NK','green')">NK</button>
-      <button class="block-btn green" onclick="addBlock('提貨點','KK','green')">KK</button>
+      <button class="block-btn pickup" onclick="addBlock('提貨點','BOIG','pickup')">BOIG</button>
+      <button class="block-btn pickup" onclick="addBlock('提貨點','KY2','pickup')">KY2</button>
+      <button class="block-btn pickup" onclick="addBlock('提貨點','KY3','pickup')">KY3</button>
+      <button class="block-btn pickup" onclick="addBlock('提貨點','NK','pickup')">NK</button>
+      <button class="block-btn pickup" onclick="addBlock('提貨點','KK','pickup')">KK</button>
       <input type="text" id="pickupInput" class="custom-input" placeholder="手動輸入"/>
-      <button class="block-btn green" onclick="addCustomBlock('提貨點')">新增</button>
+      <button class="block-btn pickup" onclick="addCustomBlock('提貨點')">新增</button>
     </div>
     <div class="label">卸貨點</div>
     <div class="section" id="dropSection" style="max-width:100%;">
-      <button class="block-btn blue" onclick="addBlock('卸貨點','美光AATT','blue')">美光AATT</button>
+      <button class="block-btn drop" onclick="addBlock('卸貨點','美光AATT','drop')">美光AATT</button>
+      <!-- ... 其餘卸貨點照需求補 ... -->
       <input type="text" id="dropInput" class="custom-input" placeholder="手動輸入"/>
-      <button class="block-btn blue" onclick="addCustomBlock('卸貨點')">新增</button>
+      <button class="block-btn drop" onclick="addCustomBlock('卸貨點')">新增</button>
     </div>
     <div class="label">路程時間</div>
     <div class="section">
@@ -108,12 +113,12 @@
     </div>
     <div class="label">提貨/卸貨時間</div>
     <div class="section">
-      <button class="block-btn green-t" onclick="addTimeBlock('提貨時間', 15, 'green-t')">提貨 15分鐘</button>
-      <button class="block-btn green-t" onclick="addTimeBlock('提貨時間', 30, 'green-t')">提貨 30分鐘</button>
-      <button class="block-btn green-t" onclick="addTimeBlock('提貨時間', 60, 'green-t')">提貨 60分鐘</button>
-      <button class="block-btn blue-t" onclick="addTimeBlock('卸貨時間', 15, 'blue-t')">卸貨 15分鐘</button>
-      <button class="block-btn blue-t" onclick="addTimeBlock('卸貨時間', 30, 'blue-t')">卸貨 30分鐘</button>
-      <button class="block-btn blue-t" onclick="addTimeBlock('卸貨時間', 60, 'blue-t')">卸貨 60分鐘</button>
+      <button class="block-btn pickup" onclick="addTimeBlock('提貨時間', 15, 'pickup')">提貨 15分鐘</button>
+      <button class="block-btn pickup" onclick="addTimeBlock('提貨時間', 30, 'pickup')">提貨 30分鐘</button>
+      <button class="block-btn pickup" onclick="addTimeBlock('提貨時間', 60, 'pickup')">提貨 60分鐘</button>
+      <button class="block-btn drop" onclick="addTimeBlock('卸貨時間', 15, 'drop')">卸貨 15分鐘</button>
+      <button class="block-btn drop" onclick="addTimeBlock('卸貨時間', 30, 'drop')">卸貨 30分鐘</button>
+      <button class="block-btn drop" onclick="addTimeBlock('卸貨時間', 60, 'drop')">卸貨 60分鐘</button>
     </div>
     <div class="summary-bar" style="margin-top:10px; margin-bottom:10px; justify-content: flex-start;">
       <span class="starttime-row">
@@ -175,7 +180,7 @@
           row2.innerText = toHHMM(block.minute);
         } else {
           row2.className += ' empty';
-          row2.innerText = '\u00A0';
+          row2.innerText = '\u00A0'; // 空白
         }
 
         // 第三行
@@ -207,25 +212,25 @@
       updateTimeline();
     }
     function addBlock(type, label, color) {
-      // 區分時間方塊色系
-      if(type==='提貨時間') color='green-t';
-      if(type==='卸貨時間') color='blue-t';
       groupCounter++;
       timelineData.push({type, label, color, minute: 0, groupId: groupCounter});
       updateTimeline();
     }
     function addCustomBlock(type) {
       let inputId = (type === '提貨點') ? 'pickupInput' : 'dropInput';
-      let color = (type === '提貨點') ? 'green' : 'blue';
+      let color;
+      if (type === '提貨點') {
+        const val = document.getElementById(inputId).value.trim();
+        color = (val === '重車' || val === '車場') ? 'green' : 'pickup';
+      } else {
+        color = 'drop';
+      }
       let txt = document.getElementById(inputId).value.trim();
       if (!txt) return;
       addBlock(type, txt, color);
       document.getElementById(inputId).value = '';
     }
     function addTimeBlock(type, min, color) {
-      // 強制時間色系
-      if(type==='提貨時間') color='green-t';
-      if(type==='卸貨時間') color='blue-t';
       let last = timelineData.length ? timelineData[timelineData.length-1] : null;
       if(last && last.type === type && ['路程','等待','提貨時間','卸貨時間'].includes(type)) {
         last.minute += min;
