@@ -26,10 +26,9 @@
     .timeline-block .del-btn:hover { background: #bc2525; transform: scale(1.1);}
     .timeline-row-1 { font-weight: 900; font-size: 16px; }
     .timeline-row-2 { font-weight: 400; font-size: 13.5px; margin-top:1px; color: #696b70; min-height:17px;}
-    .timeline-row-3 { font-weight: 600; font-size: 15.1px; color: #254048; letter-spacing: 0.2px; margin-top: 2.5px;}
-    .timeline-block .arrow { font-size: 32px; color: #989898; margin-top: 10px; margin-bottom: -4px; user-select: none; pointer-events: none; display: block;}
+    .timeline-row-3 { font-weight: 900; font-size: 17px; color: #244D4E; letter-spacing: 0.1px; margin-top: 2.5px;}
     .custom-input { padding: 7px 12px; border-radius: 8px; border: 1px solid #bbc7d2; margin-right: 4px; font-size: 15px; outline: none; background: #f9fcff; box-shadow: 0 1px 4px rgba(110,160,200,0.03);}
-    .summary-bar { font-size: 1.08em; font-weight: 600; letter-spacing: 0.8px; min-width: 255px; color: #535353; text-align: right; margin-top: 8px; display: flex; flex-direction: row; align-items: center; justify-content: flex-end; gap: 15px;}
+    .summary-bar { font-size: 1.08em; font-weight: 600; letter-spacing: 0.8px; min-width: 255px; color: #535353; text-align: right; margin-top: 8px; display: flex; flex-direction: row; align-items: center; justify-content: flex-end; gap: 20px;}
     .summary-row { margin-bottom: 5px; margin-right: 14px;}
     .ios-timeline-flexwrap { display: flex; align-items: flex-start; justify-content: space-between;}
     .starttime-row { display: flex; align-items: center; gap: 8px; margin: 0 0 0 0;}
@@ -60,13 +59,14 @@
     </div>
     <div class="label">卸貨點</div>
     <div class="section" id="dropSection" style="max-width:100%;">
-      <!-- (略：卸貨點按鈕同上一版，直接複製) -->
+      <!-- 全部卸貨點 -->
       <button class="block-btn blue" onclick="addBlock('卸貨點','鹿港銀泰','blue')">鹿港銀泰</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','矽品潭子大','blue')">矽品潭子大</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','友達后里備用','blue')">友達后里備用</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','環鴻新桶','blue')">環鴻新桶</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','環鴻南崗','blue')">環鴻南崗</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','美光后里','blue')">美光后里</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','美光AATT','blue')">美光AATT</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','展頌斗六','blue')">展頌斗六</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','展送竹山','blue')">展送竹山</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','矽品潭子小','blue')">矽品潭子小</button>
@@ -120,12 +120,7 @@
       <div class="timeline-area-flex">
         <div class="timeline-area" id="timeline"></div>
       </div>
-      <div class="summary-bar" id="summary">
-        <div class="starttime-row">
-          <span class="start-label">出發時間：</span>
-          <input type="time" id="startTime" value="06:00" class="custom-input" style="width:100px;"/>
-        </div>
-      </div>
+      <div class="summary-bar" id="summary"></div>
     </div>
   </div>
   <script>
@@ -140,7 +135,7 @@
       const timeline = document.getElementById('timeline');
       timeline.innerHTML = '';
       let totalMin = 0;
-      let startStr = document.getElementById('startTime').value || '06:00';
+      let startStr = document.getElementById('startTime') ? document.getElementById('startTime').value : '06:00';
       let [h, m] = startStr.split(':').map(x=>parseInt(x,10));
       let nowMin = h*60 + m;
       let timeNow = nowMin;
@@ -150,35 +145,34 @@
         const node = document.createElement('div');
         node.className = 'timeline-block '+block.color;
 
-        // 刪除按鈕（往右上）
+        // 刪除按鈕（右上）
         let btn = document.createElement('button');
         btn.className = 'del-btn';
         btn.innerText = '✕';
         btn.onclick = ()=>delBlockAndAfter(i);
         node.appendChild(btn);
 
-        // 內容區
-        let row1 = document.createElement('div');
-        let row2 = document.createElement('div');
-        let row3 = document.createElement('div');
-        row1.className = 'timeline-row-1';
-        row2.className = 'timeline-row-2';
-        row3.className = 'timeline-row-3';
-
         // 第一行：標題或地點
+        let row1 = document.createElement('div');
+        row1.className = 'timeline-row-1';
         if(block.type==='提貨點'||block.type==='卸貨點') row1.innerText = block.label;
-        else if(block.type==='路程') row1.innerHTML = '路程 <span class="arrow">➜</span>';
+        else if(block.type==='路程') row1.innerHTML = '路程 ➜';
         else if(block.type==='等待') row1.innerText = '等待';
         else if(block.type==='提貨時間') row1.innerText = '提貨時間';
         else if(block.type==='卸貨時間') row1.innerText = '卸貨時間';
 
         // 第二行：該方塊所需時間
+        let row2 = document.createElement('div');
+        row2.className = 'timeline-row-2';
         if(['路程','等待','提貨時間','卸貨時間'].includes(block.type)){
           row2.innerText = toHHMM(block.minute);
         } else {
           row2.innerText = '';
         }
+
         // 第三行：累加後的新時間 (24小時制)
+        let row3 = document.createElement('div');
+        row3.className = 'timeline-row-3';
         if(['路程','等待','提貨時間','卸貨時間'].includes(block.type)){
           timeNow += block.minute;
           row3.innerText = toHHMM(timeNow);
@@ -198,12 +192,12 @@
       let eh = Math.floor(endMins/60)%24, em = endMins%60;
       let endStr = `${eh.toString().padStart(2,'0')}:${em.toString().padStart(2,'0')}`;
       document.getElementById('summary').innerHTML = `
-        <div class="starttime-row">
+        <span class="starttime-row">
           <span class="start-label">出發時間：</span>
           <input type="time" id="startTime" value="${startStr}" class="custom-input" style="width:100px;"/>
-        </div>
-        <div class="summary-row">預計結束時間：${endStr}</div>
-        <div class="summary-row">總工時：${totalMin} 分鐘｜${minStr}</div>
+        </span>
+        <span class="summary-row">預計結束時間：${endStr}</span>
+        <span class="summary-row">總工時：${totalMin} 分鐘｜${minStr}</span>
       `;
       document.getElementById('startTime').addEventListener('input', updateTimeline);
     }
