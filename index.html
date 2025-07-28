@@ -6,160 +6,147 @@
   <title>運輸流程時間線工具</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --glass-bg: rgba(255,255,255,0.52);
-      --glass-blur: blur(16px) saturate(1.07);
-      --primary-green: rgba(120,211,183,0.32);
-      --primary-blue: rgba(115,168,255,0.33);
-      --primary-gray: rgba(195,200,210,0.28);
-      --primary-pink: rgba(253,170,212,0.34);
-      --primary-purple: rgba(180,158,255,0.32);
-      --primary-purple-deep: rgba(125,111,203,0.33);
-      --glass-shadow: 0 6px 24px rgba(130,160,190,0.12), 0 1.5px 10px rgba(220,235,255,0.13);
-      --del-btn: #FF4567;
-      --del-btn-hover: #CC2347;
-      --del-btn-shadow: 0 2.5px 8px rgba(255,75,120,0.13);
+    html, body { 
+      background: linear-gradient(135deg, #e8f0ff 0%, #f4f7fb 100%); 
+      margin:0; padding:0; 
+      font-family: 'Noto Sans TC', 'San Francisco', 'PingFang TC', 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+      letter-spacing: 0.02em;
     }
-    html, body {
-      background: radial-gradient(ellipse 110% 65% at 40% 60%, #e9eef7 60%, #e2eaff 100%);
-      margin:0; padding:0;
-      font-family: 'SF Pro Display', 'Noto Sans TC', 'PingFang TC', 'Helvetica Neue', Arial, sans-serif;
-      letter-spacing: 0.01em;
+    .container { 
+      max-width: 980px; margin: 28px auto 18px auto; 
+      background: rgba(255,255,255,0.42); 
+      border-radius: 30px; 
+      box-shadow: 0 10px 40px 0 rgba(54, 88, 170, 0.09), 0 1.5px 8px rgba(180,190,220,0.09);
+      padding: 2.2em 1.6em 1.2em 1.6em; 
+      backdrop-filter: blur(18px) saturate(1.16);
     }
-    .container {
-      max-width: 1000px; margin: 34px auto 24px auto;
-      background: var(--glass-bg);
-      border-radius: 28px;
-      box-shadow: var(--glass-shadow);
-      padding: 2.5em 2.3em 2.1em 2.3em;
-      backdrop-filter: var(--glass-blur);
+    h1 { 
+      text-align: center; 
+      margin-bottom: 1.25em; 
+      letter-spacing: 1.2px; 
+      font-size: 2.1em; 
+      font-weight: 700; 
+      color: #262c3a;
+      text-shadow: 0 1px 6px #dde7fa8a;
     }
-    h1 {
-      text-align: center; margin-bottom: 1.1em;
-      letter-spacing: 1.2px; font-size: 2.1em; font-weight: 700;
-      color: #253246;
-      text-shadow: 0 3px 16px rgba(255,255,255,0.15);
+    .label { font-weight: 600; margin: 1.2em 0 0.25em 0; font-size: 1.1em; color: #506083;}
+    .section { display: flex; flex-wrap: wrap; gap: 0.55em; margin-bottom: 0.3em;}
+    .block-btn { 
+      padding: 8px 19px; font-size: 16px; border: none; border-radius: 16px; 
+      font-weight: 700; letter-spacing: 1px; margin-bottom: 7px; margin-right: 3px; cursor: pointer; 
+      box-shadow: 0 1px 7px rgba(30,50,110,0.09); 
+      transition: transform 0.13s, box-shadow 0.16s;
+      backdrop-filter: blur(15px) saturate(1.1); opacity: 0.98;
+      text-shadow: 0 1.5px 5px #ffffff11;
     }
-    .label {
-      font-weight: 900; margin: 1.7em 0 0.2em 0;
-      font-size: 1.13em; color: #406fd1;
-      letter-spacing: 1.2px;
+    .block-btn:active { transform: scale(0.96);}
+    .green { background: rgba(182,240,201,0.52);}
+    .blue { background: rgba(188,221,255,0.54);}
+    .gray { background: rgba(235,238,246,0.77);}
+    .pink { background: rgba(255,212,233,0.68);}
+    .purple-l { background: rgba(185,180,255,0.53);}
+    .purple-d { background: rgba(147,134,241,0.50);}
+    /* Timeline區 */
+    .timeline-area-flex { 
+      display: flex; align-items: flex-start; 
+      justify-content: flex-start; 
+      background: rgba(250,255,255,0.68); 
+      border-radius: 22px; min-height: 104px; 
+      margin: 2.1em 0 1.4em 0; 
+      box-shadow: 0 1px 11px rgba(99,140,200,0.07); 
+      padding: 17px 15px 16px 15px; 
+      overflow-x: auto; 
+      border: 1.3px solid rgba(198,211,236,0.08);
     }
-    .section {
-      display: flex; flex-wrap: wrap; gap: 0.65em; margin-bottom: 0.3em;
-    }
-    .block-btn {
-      padding: 9px 22px; font-size: 15.7px; border: none; border-radius: 17px;
-      font-weight: 600; letter-spacing: 1.1px; margin-bottom: 7px; margin-right: 3px;
-      cursor: pointer;
-      box-shadow: 0 1.7px 9px rgba(170,170,190,0.10);
-      backdrop-filter: var(--glass-blur);
-      opacity: 0.96;
-      border: none;
-      transition: transform 0.14s, box-shadow 0.17s, background 0.14s;
-    }
-    .block-btn:active { transform: scale(0.94);}
-    .block-btn.green { background: var(--primary-green);}
-    .block-btn.blue  { background: var(--primary-blue);}
-    .block-btn.gray  { background: var(--primary-gray);}
-    .block-btn.pink  { background: var(--primary-pink);}
-    .block-btn.purple-l { background: var(--primary-purple);}
-    .block-btn.purple-d { background: var(--primary-purple-deep);}
-    .block-btn.green, .block-btn.blue, .block-btn.purple-l, .block-btn.purple-d {
-      color: #214F4A; font-weight: 700; letter-spacing: 1.05px;
-      text-shadow: 0 1px 5px #fff7;
-    }
-    .block-btn.gray { color:#2B2F37; font-weight:600;}
-    .block-btn.pink { color: #97345F; font-weight:700;}
-    .custom-input {
-      padding: 8px 13px; border-radius: 9px; border: 1.2px solid #c8d2e3; margin-right: 4px;
-      font-size: 15.5px; outline: none; background: #fafdff;
-      box-shadow: 0 1.5px 6px rgba(130,140,180,0.06);
-      font-family: inherit;
-    }
-    .timeline-area-flex {
-      display: flex; align-items: flex-start; justify-content: flex-start;
-      background: rgba(255,255,255,0.36);
-      border-radius: 18px;
-      min-height: 92px;
-      margin: 2em 0 1.5em 0;
-      box-shadow: 0 3.5px 18px rgba(120,140,190,0.07);
-      padding: 18px 14px 16px 18px; overflow-x: auto;
-    }
-    .timeline-area {
-      display: flex; flex-wrap: wrap; gap: 13px 12px;
+    .timeline-area { 
+      display: flex; flex-wrap: wrap; gap: 15px 10px;
+      align-items: flex-end;
     }
     .timeline-block {
-      display: inline-flex; flex-direction: column; align-items: center; position: relative;
-      border-radius: 20px;
-      min-width: 108px; max-width: 225px;
-      padding: 12px 15px 13px 15px;
-      font-size: 16.5px; font-weight: 500;
-      letter-spacing: 0.85px;
-      background: var(--glass-bg);
-      box-shadow: var(--glass-shadow);
-      border: 1.2px solid rgba(255,255,255,0.26);
-      backdrop-filter: var(--glass-blur);
-      margin: 0 8px 11px 0;
-      transition: box-shadow 0.15s;
-      z-index:1;
+      display: flex; flex-direction: column; align-items: center; 
+      position: relative; border-radius: 21px; 
+      min-width: 127px; max-width: 175px; 
+      min-height: 110px; 
+      padding: 13px 15px 10px 15px; 
+      margin: 0; box-shadow: 0 2px 15px 0 #c7daf440, 0 1px 3px #e6ecfa19; 
+      backdrop-filter: blur(18px) saturate(1.17);
+      border: 0.6px solid #e1e8fa40;
+      background: linear-gradient(125deg, rgba(255,255,255,0.63) 60%, rgba(236,242,255,0.44) 100%);
+      margin-right: 0;
+      margin-bottom: 2px;
+      transition: box-shadow 0.16s, transform 0.13s;
+      justify-content: flex-start;
     }
-    .timeline-block.green   { background: linear-gradient(115deg,rgba(220,255,242,0.52) 85%,rgba(120,211,183,0.27) 100%);}
-    .timeline-block.blue    { background: linear-gradient(115deg,rgba(225,241,255,0.52) 83%,rgba(115,168,255,0.20) 100%);}
-    .timeline-block.gray    { background: linear-gradient(115deg,rgba(237,240,250,0.65) 90%,rgba(180,200,210,0.18) 100%);}
-    .timeline-block.pink    { background: linear-gradient(115deg,rgba(255,234,245,0.63) 88%,rgba(255,176,213,0.16) 100%);}
-    .timeline-block.purple-l{ background: linear-gradient(115deg,rgba(238,235,255,0.59) 92%,rgba(180,158,255,0.17) 100%);}
-    .timeline-block.purple-d{ background: linear-gradient(115deg,rgba(227,224,255,0.60) 91%,rgba(125,111,203,0.13) 100%);}
-    .timeline-block .del-btn {
-      position: absolute; top: 7px; right: 7px;
-      background: var(--del-btn);
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 18px; height: 18px;
-      font-size: 13px;
-      line-height: 15px;
-      cursor: pointer;
-      font-weight: 900;
-      box-shadow: var(--del-btn-shadow);
-      z-index: 2;
+    .timeline-block.green { background: linear-gradient(125deg,rgba(213,252,221,0.78) 60%,rgba(204,238,220,0.45) 100%);}
+    .timeline-block.blue { background: linear-gradient(125deg,rgba(204,226,255,0.8) 60%,rgba(191,215,255,0.47) 100%);}
+    .timeline-block.gray { background: linear-gradient(125deg,rgba(241,243,247,0.95) 60%,rgba(217,225,236,0.32) 100%);}
+    .timeline-block.pink { background: linear-gradient(125deg,rgba(255,234,245,0.85) 60%,rgba(252,222,238,0.42) 100%);}
+    .timeline-block.purple-l { background: linear-gradient(125deg,rgba(226,221,255,0.83) 60%,rgba(201,185,245,0.31) 100%);}
+    .timeline-block.purple-d { background: linear-gradient(125deg,rgba(188,181,247,0.89) 60%,rgba(147,134,241,0.28) 100%);}
+    .timeline-block .del-btn { 
+      position: absolute; 
+      top: 9px; right: 11px;
+      background: transparent; border: none; 
+      width: 22px; height: 22px; 
+      padding: 0; 
+      z-index: 10; cursor: pointer; 
+      border-radius: 100px;
       display: flex; align-items: center; justify-content: center;
-      transition: background 0.17s, transform 0.12s;
-      outline: none;
+      opacity: 0.94;
+      transition: background 0.18s;
     }
-    .timeline-block .del-btn:hover {
-      background: var(--del-btn-hover); transform: scale(1.08);
+    .timeline-block .del-btn:hover { background: rgba(255,45,85,0.10);}
+    .timeline-block .del-btn svg {
+      width: 20px; height: 20px;
+      display: block;
     }
     .timeline-row-1 {
-      font-size: 16.5px; font-weight: 800; letter-spacing: 0.7px;
-      color: #273646; margin-bottom: 1px;
+      font-weight: 900; 
+      font-size: 18.5px; 
+      color: #19233d; 
+      margin-bottom: 5px;
+      letter-spacing: 0.6px;
+      min-height: 26px;
     }
     .timeline-row-2 {
-      font-size: 13.3px; font-weight: 500;
-      color: #566177; margin-top: 2px; margin-bottom: 1.5px;
-      letter-spacing: 0.12em;
+      font-weight: 400; 
+      font-size: 16.5px; 
+      margin-bottom: 2px;
+      color: #7e8faa; 
+      min-height: 25px;
+      opacity: 0.74;
+      letter-spacing: 0.05em;
     }
+    .timeline-row-2.empty { opacity: 0;}
     .timeline-row-3 {
-      font-size: 20px; font-weight: 900;
-      color: #15273D; letter-spacing: 0.13em; margin-top: 1.5px;
-      text-shadow: 0 1.5px 10px rgba(255,255,255,0.16);
+      font-weight: 900; 
+      font-size: 22px; 
+      color: #14253a; 
+      letter-spacing: 0.14em; 
+      margin-top: 2.5px;
+      min-height: 32px;
     }
-    .summary-bar {
-      font-size: 1.09em; font-weight: 700; letter-spacing: 0.8px; min-width: 255px;
-      color: #384465; text-align: left; margin: 15px 0 10px 0;
-      display: flex; flex-direction: row; align-items: center; gap: 34px;
+    .custom-input { 
+      padding: 7px 12px; border-radius: 8px; border: 1px solid #bbc7d2; 
+      margin-right: 4px; font-size: 15px; outline: none; background: #f9fcff; 
+      box-shadow: 0 1px 4px rgba(110,160,200,0.03);
     }
-    .summary-row { margin-bottom: 5px; margin-right: 15px;}
+    .summary-bar { 
+      font-size: 1.17em; font-weight: 650; letter-spacing: 0.7px; 
+      min-width: 260px; color: #26334a; text-align: left; 
+      margin-top: 8px; display: flex; flex-direction: row; align-items: center; 
+      gap: 25px;
+    }
+    .summary-row { margin-bottom: 5px; margin-right: 13px;}
     .ios-timeline-flexwrap { display: flex; align-items: flex-start; justify-content: space-between;}
-    .starttime-row { display: flex; align-items: center; gap: 8px;}
-    .start-label { font-size: 17px; font-weight: 700; color: #284A6D; margin-right: 2px;}
-    @media (max-width:1000px){
-      .container {max-width: 99vw; padding: 1.5em 1em 1.3em 1em;}
-      .timeline-area-flex {padding-right: 2px;}
+    .starttime-row { display: flex; align-items: center; gap: 8px; margin: 0 0 0 0;}
+    .start-label { font-size: 17px; font-weight: 700; color: #24345a; margin-right: 4px;}
+    @media (max-width:900px){
+      .container {max-width: 99vw;}
+      .timeline-area-flex {padding-right: 4px;}
       .ios-timeline-flexwrap { flex-direction: column; }
       .summary-bar { margin-left: 0; margin-top: 18px;}
       .starttime-row {justify-content: flex-start;}
-      .timeline-block {min-width:88px;}
     }
   </style>
 </head>
@@ -235,7 +222,8 @@
       <button class="block-btn purple-d" onclick="addTimeBlock('卸貨時間', 30, 'purple-d')">卸貨 30分鐘</button>
       <button class="block-btn purple-d" onclick="addTimeBlock('卸貨時間', 60, 'purple-d')">卸貨 60分鐘</button>
     </div>
-    <div class="summary-bar" style="margin-top:16px; margin-bottom:16px; justify-content: flex-start;">
+    <div class="label" style="margin-top:1.7em;"></div>
+    <div class="summary-bar" style="margin-top:10px; margin-bottom:10px; justify-content: flex-start;">
       <span class="starttime-row">
         <span class="start-label">出發時間：</span>
         <input type="time" id="startTime" value="06:00" class="custom-input" style="width:100px;"/>
@@ -274,7 +262,8 @@
         // 刪除按鈕（右上）
         let btn = document.createElement('button');
         btn.className = 'del-btn';
-        btn.innerHTML = '&times;';
+        btn.title = '刪除此區塊及其後所有區塊';
+        btn.innerHTML = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" fill="#ff355b" /><path d="M8.6 8.6l6.8 6.8M15.4 8.6l-6.8 6.8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>`;
         btn.onclick = ()=>delBlockAndAfter(i);
         node.appendChild(btn);
 
@@ -287,13 +276,14 @@
         else if(block.type==='提貨時間') row1.innerText = '提貨時間';
         else if(block.type==='卸貨時間') row1.innerText = '卸貨時間';
 
-        // 第二行：該方塊所需時間
+        // 第二行：該方塊所需時間或佔位
         let row2 = document.createElement('div');
         row2.className = 'timeline-row-2';
         if(['路程','等待','提貨時間','卸貨時間'].includes(block.type)){
           row2.innerText = toHHMM(block.minute);
         } else {
-          row2.innerText = '';
+          row2.className += ' empty';
+          row2.innerText = '\u00A0'; // 空白
         }
 
         // 第三行：累加後的新時間 (24小時制)
