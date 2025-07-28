@@ -6,104 +6,135 @@
   <title>運輸流程時間線工具</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Noto Sans TC', sans-serif;
-      background: linear-gradient(120deg, #ddefff 0%, #f3f9ff 100%);
-      margin: 0; padding: 0; min-height: 100vh;
+    html, body {
+      height: 100%; min-height: 100vh;
+      margin: 0; padding: 0;
+      background: linear-gradient(135deg, #e9eef7 0%, #f6f9fe 100%);
+      font-family: 'Noto Sans TC', 'San Francisco', 'PingFang TC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #24292F;
     }
     .container {
-      max-width: 900px;
-      margin: 32px auto;
-      background: rgba(255,255,255,0.55);
-      border-radius: 18px;
-      box-shadow: 0 4px 18px rgba(55,120,180,0.08);
-      padding: 2.2em 1.5em 2em 1.5em;
-      backdrop-filter: blur(12px);
+      max-width: 950px; margin: 28px auto 18px auto;
+      background: rgba(255,255,255,0.56);
+      border-radius: 22px;
+      box-shadow: 0 8px 32px rgba(30,40,110,0.07), 0 1.5px 8px rgba(180,190,220,0.09);
+      padding: 2.1em 1.5em 1.2em 1.5em;
+      backdrop-filter: blur(16px) saturate(1.25);
     }
     h1 {
-      text-align: center;
-      margin-bottom: 1.2em;
-      letter-spacing: 1px;
+      text-align: center; margin-bottom: 1.1em; letter-spacing: 1.2px; font-size: 2em; font-weight: 600;
     }
-    .label { font-weight: 600; margin-top: 1.5em; margin-bottom: 0.2em; }
-    .section { display: flex; flex-wrap: wrap; gap: 0.5em; margin-bottom: 0.2em; }
+    .label { font-weight: 600; margin: 1.2em 0 0.2em 0; font-size: 1.07em; color: #54585f; }
+    .section { display: flex; flex-wrap: wrap; gap: 0.55em; margin-bottom: 0.3em; }
     .block-btn {
-      padding: 8px 18px;
-      font-size: 16px;
+      padding: 8px 17px;
+      font-size: 15.5px;
       border: none;
-      border-radius: 12px;
+      border-radius: 13px;
       font-weight: 600;
       letter-spacing: 1px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.10);
       margin-bottom: 6px;
-      margin-right: 4px;
+      margin-right: 3px;
       cursor: pointer;
-      transition: transform 0.14s;
-      backdrop-filter: blur(16px);
+      box-shadow: 0 1px 7px rgba(0,0,0,0.06);
+      transition: transform 0.14s, box-shadow 0.19s;
+      backdrop-filter: blur(18px) saturate(1.12);
+      opacity: 0.96;
     }
     .block-btn:active { transform: scale(0.95);}
-    .green { background: rgba(195,255,195,0.66);}
-    .blue { background: rgba(181,220,255,0.7);}
-    .gray { background: rgba(238,238,238,0.90);}
-    .pink { background: rgba(255,207,225,0.75);}
-    .purple { background: rgba(215,198,255,0.80);}
-    .timeline-area {
+    .green { background: rgba(200,255,200,0.7);}
+    .blue { background: rgba(189,219,255,0.82);}
+    .gray { background: rgba(239,239,239,0.87);}
+    .pink { background: rgba(255,209,229,0.77);}
+    .purple { background: rgba(216,203,255,0.84);}
+    .timeline-area-flex {
+      display: flex; align-items: flex-start; justify-content: flex-start;
+      background: rgba(248,252,255,0.63);
+      border-radius: 16px;
+      min-height: 72px;
       margin: 2em 0 1.5em 0;
-      background: rgba(250,255,255,0.67);
-      border-radius: 14px;
-      min-height: 64px;
-      padding: 20px 10px 16px 10px;
-      box-shadow: 0 1px 6px rgba(120,140,190,0.07);
-      display: flex; flex-wrap: wrap; gap: 8px;
+      box-shadow: 0 1px 7px rgba(120,140,190,0.07);
+      padding: 16px 12px 15px 13px;
+      overflow-x: auto;
     }
+    .timeline-area { display: flex; flex-wrap: wrap; gap: 11px 9px;}
     .timeline-block {
       display: inline-flex;
+      flex-direction: column;
       align-items: center;
-      margin: 3px 6px 3px 0;
-      padding: 7px 18px 7px 14px;
-      font-size: 15px;
-      border-radius: 11px;
-      font-weight: 500;
+      margin-right: 2px; margin-bottom: 3px;
+      border-radius: 13px;
       position: relative;
-      box-shadow: 0 1.5px 8px rgba(90,90,90,0.05);
-      backdrop-filter: blur(16px);
+      box-shadow: 0 2px 7px rgba(120,150,170,0.06);
+      min-width: 74px;
+      max-width: 155px;
+      padding: 7px 14px 5px 14px;
+      font-size: 15.4px;
+      font-weight: 500;
+      letter-spacing: 0.8px;
+      backdrop-filter: blur(19px) saturate(1.18);
+      margin-left: 0;
     }
     .timeline-block .del-btn {
-      margin-left: 8px;
-      font-size: 15px;
-      background: #fa5c5c;
+      position: absolute; top: 5px; right: 5px;
+      background: rgba(255,90,90,0.88);
       color: #fff;
       border: none;
       border-radius: 50%;
-      width: 22px; height: 22px;
+      width: 19px; height: 19px;
+      font-size: 12px; line-height: 16px;
       cursor: pointer;
       font-weight: bold;
-      box-shadow: 0 1px 6px rgba(255,80,80,0.13);
-      transition: background 0.17s;
+      padding: 0; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0.5px 2px rgba(180,0,0,0.08);
+      transition: background 0.19s, transform 0.12s;
     }
-    .timeline-block .del-btn:hover { background: #b71c1c; }
+    .timeline-block .del-btn:hover { background: #bc2525; transform: scale(1.07);}
+    .timeline-block .time-hhmm {
+      font-size: 12.6px;
+      font-weight: 500;
+      color: #5c5c5c;
+      margin-top: 0.9em;
+      letter-spacing: 0.6px;
+      opacity: 0.8;
+    }
+    .timeline-block .arrow {
+      font-size: 20px;
+      color: #c6c6c6;
+      position: absolute;
+      right: -18px; top: 50%;
+      transform: translateY(-48%);
+      pointer-events: none;
+      user-select: none;
+    }
     .custom-input {
-      padding: 7px 11px;
-      border-radius: 7px;
+      padding: 7px 12px;
+      border-radius: 8px;
       border: 1px solid #bbc7d2;
       margin-right: 4px;
       font-size: 15px;
       outline: none;
+      background: #f9fcff;
+      box-shadow: 0 1px 4px rgba(110,160,200,0.03);
     }
     .summary-bar {
-      font-size: 1.11em;
+      font-size: 1.08em;
       font-weight: 600;
-      letter-spacing: 1px;
-      padding-top: 6px;
+      letter-spacing: 0.8px;
+      padding-left: 24px;
+      min-width: 255px;
+      color: #535353;
+      text-align: left;
+      margin-top: 8px;
     }
-    .type-select {
-      border-radius: 7px; border: 1px solid #bbc7d2; padding: 7px 5px;
-      font-size: 15px; margin-right: 7px; outline: none;
+    .ios-timeline-flexwrap {
+      display: flex; align-items: flex-start; justify-content: space-between;
     }
-    @media (max-width:600px){
-      .container{padding:0.7em;}
-      h1{font-size:20px;}
-      .timeline-area{padding:12px 2px;}
+    @media (max-width:900px){
+      .container {max-width: 99vw;}
+      .timeline-area-flex {padding-right: 5px;}
+      .ios-timeline-flexwrap { flex-direction: column; }
+      .summary-bar { padding-left: 0; margin-top: 18px;}
     }
   </style>
 </head>
@@ -112,7 +143,6 @@
     <h1>運輸流程時間線工具</h1>
     <div class="label">出發時間</div>
     <input type="time" id="startTime" value="04:00" class="custom-input"/>
-    <!-- 提貨點 -->
     <div class="label">提貨點</div>
     <div class="section" id="pickupSection">
       <button class="block-btn green" onclick="addBlock('提貨點','車場','green')">車場</button>
@@ -125,7 +155,6 @@
       <input type="text" id="pickupInput" class="custom-input" placeholder="手動輸入"/>
       <button class="block-btn green" onclick="addCustomBlock('提貨點')">新增</button>
     </div>
-    <!-- 卸貨點 -->
     <div class="label">卸貨點</div>
     <div class="section" id="dropSection" style="max-width:100%;">
       <button class="block-btn blue" onclick="addBlock('卸貨點','鹿港銀泰','blue')">鹿港銀泰</button>
@@ -161,21 +190,18 @@
       <input type="text" id="dropInput" class="custom-input" placeholder="手動輸入"/>
       <button class="block-btn blue" onclick="addCustomBlock('卸貨點')">新增</button>
     </div>
-    <!-- 路程時間 -->
     <div class="label">路程時間</div>
     <div class="section">
       <button class="block-btn gray" onclick="addTimeBlock('路程', 15, 'gray')">15分鐘</button>
       <button class="block-btn gray" onclick="addTimeBlock('路程', 30, 'gray')">30分鐘</button>
       <button class="block-btn gray" onclick="addTimeBlock('路程', 60, 'gray')">60分鐘</button>
     </div>
-    <!-- 等待時間 -->
     <div class="label">等待時間</div>
     <div class="section">
       <button class="block-btn pink" onclick="addTimeBlock('等待', 15, 'pink')">15分鐘</button>
       <button class="block-btn pink" onclick="addTimeBlock('等待', 30, 'pink')">30分鐘</button>
       <button class="block-btn pink" onclick="addTimeBlock('等待', 60, 'pink')">60分鐘</button>
     </div>
-    <!-- 提貨/卸貨時間 -->
     <div class="label">提貨/卸貨時間</div>
     <div class="section">
       <button class="block-btn purple" onclick="addTimeBlock('提貨時間', 15, 'purple')">提貨 15分鐘</button>
@@ -185,15 +211,24 @@
       <button class="block-btn purple" onclick="addTimeBlock('卸貨時間', 30, 'purple')">卸貨 30分鐘</button>
       <button class="block-btn purple" onclick="addTimeBlock('卸貨時間', 60, 'purple')">卸貨 60分鐘</button>
     </div>
-    <!-- 時間線區 -->
-    <div class="label" style="margin-top:1.7em;">運輸流程時間線</div>
-    <div class="timeline-area" id="timeline"></div>
-    <div class="summary-bar" id="summary"></div>
+    <div class="label" style="margin-top:1.7em;"></div>
+    <div class="ios-timeline-flexwrap">
+      <div class="timeline-area-flex">
+        <div class="timeline-area" id="timeline"></div>
+      </div>
+      <div class="summary-bar" id="summary"></div>
+    </div>
   </div>
   <script>
     // 資料結構：{type, label, color, minute, groupId}
     let timelineData = [];
     let groupCounter = 0;
+
+    function toHHMM(mins) {
+      let h = Math.floor(mins/60);
+      let m = mins%60;
+      return (h<10?'0':'')+h+':'+(m<10?'0':'')+m;
+    }
 
     function updateTimeline() {
       const timeline = document.getElementById('timeline');
@@ -205,11 +240,15 @@
         // 方塊渲染
         const node = document.createElement('div');
         node.className = `timeline-block ${block.color}`;
-        if (block.type.endsWith('時間')) {
-          node.innerHTML = `${block.label}${block.minute}分鐘 <button class="del-btn" onclick="delBlock(${block.groupId})">×</button>`;
-        } else {
-          node.innerHTML = `${block.label} <button class="del-btn" onclick="delBlock(${block.groupId})">×</button>`;
+        let html = block.label;
+        // 時間顯示（只有時間型才顯示下方hh:mm）
+        if(block.type.endsWith('時間') || block.type==='路程' || block.type==='等待') {
+          html += `<div class="time-hhmm">${toHHMM(block.minute)}</div>`;
         }
+        // 路程類加箭頭
+        if(block.type==='路程') html += `<span class="arrow">➜</span>`;
+        html += `<button class="del-btn" onclick="delBlock(${block.groupId})">&times;</button>`;
+        node.innerHTML = html;
         timeline.appendChild(node);
       });
       // 總結
@@ -218,7 +257,9 @@
       let endMins = h*60 + m + totalMin;
       let eh = Math.floor(endMins/60)%24, em = endMins%60;
       let endStr = `${eh.toString().padStart(2,'0')}:${em.toString().padStart(2,'0')}`;
-      document.getElementById('summary').innerText = `總工時：${totalMin} 分鐘｜預計結束時間：${endStr}`;
+      let minStr = toHHMM(totalMin);
+      document.getElementById('summary').innerHTML =
+        `總工時：${totalMin} 分鐘｜${minStr}　<br>預計結束時間：${endStr}`;
     }
 
     function delBlock(groupId) {
@@ -245,16 +286,15 @@
     function addTimeBlock(type, min, color) {
       let last = timelineData.length ? timelineData[timelineData.length-1] : null;
       if(last && last.type === type && ['路程','等待','提貨時間','卸貨時間'].includes(type)) {
-        // 合併（更新 groupId 區塊分鐘）
+        // 合併
         last.minute += min;
-        last.label = type === '路程' ? '路程' : (type==='等待' ? '等待' : (type==='提貨時間' ? '提貨時間' : '卸貨時間'));
       } else {
         groupCounter++;
-        timelineData.push({type, label: (type==='路程'?'路程':type), color, minute: min, groupId: groupCounter});
+        let label = (type==='路程'?'路程':type==='等待'?'等待':type==='提貨時間'?'提貨時間':'卸貨時間');
+        timelineData.push({type, label, color, minute: min, groupId: groupCounter});
       }
       updateTimeline();
     }
-    // 時間改動即時刷新
     document.getElementById('startTime').addEventListener('input', updateTimeline);
   </script>
 </body>
