@@ -1,179 +1,94 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>運輸流程時間線工具</title>
-    <style>
-        body {
-            font-family: "Segoe UI", Roboto, sans-serif;
-            background: linear-gradient(to right, #e0eafc, #cfdef3);
-            padding: 20px;
-            margin: 0;
-        }
-        h2 {
-            text-align: center;
-        }
-        .category {
-            margin-bottom: 20px;
-        }
-        .button-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .btn {
-            padding: 10px 18px;
-            border: none;
-            border-radius: 15px;
-            color: #333;
-            font-weight: bold;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: all 0.2s ease-in-out;
-        }
-        .btn:hover {
-            transform: scale(1.05);
-        }
-        .yellow { background: rgba(255, 255, 153, 0.6); }
-        .pink { background: rgba(255, 204, 229, 0.6); }
-        .purple { background: rgba(204, 153, 255, 0.6); }
-        .green { background: rgba(153, 255, 204, 0.6); }
-        .blue { background: rgba(153, 204, 255, 0.6); }
-        .custom-input {
-            padding: 6px 10px;
-            font-size: 14px;
-            margin-left: 10px;
-            border-radius: 5px;
-            border: 1px solid #aaa;
-        }
-        #timeline {
-            margin-top: 30px;
-            padding: 15px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            box-shadow: inset 0 0 6px rgba(0,0,0,0.05);
-        }
-        .timeline-block {
-            display: inline-block;
-            margin: 6px;
-            padding: 8px 12px;
-            border-radius: 12px;
-            font-size: 14px;
-            position: relative;
-        }
-        .timeline-block .remove-btn {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ff4d4d;
-            color: #fff;
-            border-radius: 50%;
-            border: none;
-            font-size: 12px;
-            cursor: pointer;
-            width: 18px;
-            height: 18px;
-        }
-        #summary {
-            margin-top: 20px;
-            font-weight: bold;
-            font-size: 16px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>運輸流程時間線工具</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: linear-gradient(to right, #e0ecf8, #f7faff);
+      margin: 0;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    .label {
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+    .section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0.5rem 0 1rem;
+    }
+    .block {
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      color: #333;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: transform 0.1s;
+    }
+    .block:hover {
+      transform: scale(1.05);
+    }
+    .green { background: rgba(200,255,200,0.7); }
+    .blue { background: rgba(200,225,255,0.7); }
+    .gray { background: rgba(255,255,200,0.7); }
+    .pink { background: rgba(255,200,225,0.7); }
+    .purple { background: rgba(220,200,255,0.7); }
+  </style>
 </head>
 <body>
-    <h2>運輸流程時間線工具</h2>
-    <div>
-        <label for="startTime">出發時間：</label>
-        <input type="time" id="startTime" value="04:00" class="custom-input">
+  <div class="container">
+    <h1>運輸流程時間線工具</h1>
+    <div class="label">出發時間</div>
+    <input type="time" id="startTime" value="04:00" />
+    <div class="label">提貨點</div>
+    <div class="section">
+      <div class="block green">KY2</div>
+      <div class="block green">KY3</div>
+      <div class="block green">NK</div>
+      <div class="block green">KK</div>
     </div>
-
-    <div class="category">
-        <h3>🛣️ 路程時間</h3>
-        <div class="button-group">
-            <button class="btn yellow" onclick="addToTimeline('路程 15分鐘', 15, 'yellow')">15分鐘</button>
-            <button class="btn yellow" onclick="addToTimeline('路程 30分鐘', 30, 'yellow')">30分鐘</button>
-            <button class="btn yellow" onclick="addToTimeline('路程 60分鐘', 60, 'yellow')">60分鐘</button>
-        </div>
+    <div class="label">卸貨點</div>
+    <div class="section">
+      <div class="block blue">鹿港銀泰</div>
+      <div class="block blue">矽品潭子大</div>
+      <div class="block blue">環鴻新桶</div>
     </div>
-
-    <div class="category">
-        <h3>⏳ 等待時間</h3>
-        <div class="button-group">
-            <button class="btn pink" onclick="addToTimeline('等待 15分鐘', 15, 'pink')">15分鐘</button>
-            <button class="btn pink" onclick="addToTimeline('等待 30分鐘', 30, 'pink')">30分鐘</button>
-            <button class="btn pink" onclick="addToTimeline('等待 60分鐘', 60, 'pink')">60分鐘</button>
-        </div>
+    <div class="label">路程時間</div>
+    <div class="section">
+      <div class="block gray">15分鐘</div>
+      <div class="block gray">30分鐘</div>
+      <div class="block gray">60分鐘</div>
     </div>
-
-    <div class="category">
-        <h3>⚙️ 作業時間</h3>
-        <div class="button-group">
-            <button class="btn purple" onclick="addToTimeline('作業 15分鐘', 15, 'purple')">15分鐘</button>
-            <button class="btn purple" onclick="addToTimeline('作業 30分鐘', 30, 'purple')">30分鐘</button>
-            <button class="btn purple" onclick="addToTimeline('作業 60分鐘', 60, 'purple')">60分鐘</button>
-        </div>
+    <div class="label">等待時間</div>
+    <div class="section">
+      <div class="block pink">15分鐘</div>
+      <div class="block pink">30分鐘</div>
+      <div class="block pink">60分鐘</div>
     </div>
-
-    <div class="category">
-        <h3>📦 地點</h3>
-        <div class="button-group">
-            <button class="btn green" onclick="addToTimeline('提貨點', 0, 'green')">提貨點</button>
-            <button class="btn blue" onclick="addToTimeline('卸貨點', 0, 'blue')">卸貨點</button>
-            <input type="text" id="customLocation" class="custom-input" placeholder="自行輸入地點">
-            <button class="btn" onclick="addCustomLocation()">新增</button>
-        </div>
+    <div class="label">提/卸貨時間</div>
+    <div class="section">
+      <div class="block purple">15分鐘</div>
+      <div class="block purple">30分鐘</div>
+      <div class="block purple">60分鐘</div>
     </div>
-
-    <h3>🧭 運輸流程時間線</h3>
-    <div id="timeline"></div>
-    <div id="summary">總工時：0分鐘｜預計結束時間：--:--</div>
-
-    <script>
-        let totalMinutes = 0;
-        const timeline = document.getElementById("timeline");
-        const summary = document.getElementById("summary");
-
-        function addToTimeline(label, minutes, colorClass) {
-            const div = document.createElement("div");
-            div.className = `timeline-block ${colorClass}`;
-            div.innerHTML = label + '<button class="remove-btn" onclick="removeBlock(this, ' + minutes + ')">×</button>';
-            timeline.appendChild(div);
-            totalMinutes += minutes;
-            updateSummary();
-        }
-
-        function addCustomLocation() {
-            const input = document.getElementById("customLocation");
-            if (input.value.trim() !== "") {
-                addToTimeline(input.value.trim(), 0, "blue");
-                input.value = "";
-            }
-        }
-
-        function removeBlock(btn, minutes) {
-            const block = btn.parentNode;
-            timeline.removeChild(block);
-            totalMinutes -= minutes;
-            updateSummary();
-        }
-
-        function updateSummary() {
-            const startTime = document.getElementById("startTime").value;
-            if (!startTime) return;
-
-            const [hour, minute] = startTime.split(":").map(Number);
-            const start = new Date();
-            start.setHours(hour, minute, 0, 0);
-            const end = new Date(start.getTime() + totalMinutes * 60000);
-
-            const endStr = end.toTimeString().substring(0, 5);
-            summary.textContent = `總工時：${totalMinutes} 分鐘｜預計結束時間：${endStr}`;
-        }
-    </script>
+  </div>
 </body>
 </html>
