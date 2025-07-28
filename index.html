@@ -4,149 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>運輸流程時間線工具</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&display=swap" rel="stylesheet">
   <style>
-    html, body {
-      height: 100%; min-height: 100vh;
-      margin: 0; padding: 0;
-      background: linear-gradient(135deg, #e9eef7 0%, #f6f9fe 100%);
-      font-family: 'Noto Sans TC', 'San Francisco', 'PingFang TC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      color: #24292F;
-    }
-    .container {
-      max-width: 950px; margin: 28px auto 18px auto;
-      background: rgba(255,255,255,0.56);
-      border-radius: 22px;
-      box-shadow: 0 8px 32px rgba(30,40,110,0.07), 0 1.5px 8px rgba(180,190,220,0.09);
-      padding: 2.1em 1.5em 1.2em 1.5em;
-      backdrop-filter: blur(16px) saturate(1.25);
-    }
-    h1 {
-      text-align: center; margin-bottom: 1.1em; letter-spacing: 1.2px; font-size: 2em; font-weight: 600;
-    }
-    .label { font-weight: 600; margin: 1.2em 0 0.2em 0; font-size: 1.07em; color: #54585f; }
-    .section { display: flex; flex-wrap: wrap; gap: 0.55em; margin-bottom: 0.3em; }
-    .block-btn {
-      padding: 8px 17px;
-      font-size: 15.5px;
-      border: none;
-      border-radius: 13px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      margin-bottom: 6px;
-      margin-right: 3px;
-      cursor: pointer;
-      box-shadow: 0 1px 7px rgba(0,0,0,0.06);
-      transition: transform 0.14s, box-shadow 0.19s;
-      backdrop-filter: blur(18px) saturate(1.12);
-      opacity: 0.96;
-    }
+    html, body { background: linear-gradient(135deg, #e9eef7 0%, #f6f9fe 100%); margin:0; padding:0; font-family: 'Noto Sans TC', 'San Francisco', 'PingFang TC', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+    .container { max-width: 950px; margin: 28px auto 18px auto; background: rgba(255,255,255,0.55); border-radius: 22px; box-shadow: 0 8px 32px rgba(30,40,110,0.07), 0 1.5px 8px rgba(180,190,220,0.09); padding: 2.1em 1.5em 1.2em 1.5em; backdrop-filter: blur(16px) saturate(1.25);}
+    h1 { text-align: center; margin-bottom: 1.1em; letter-spacing: 1.2px; font-size: 2em; font-weight: 600;}
+    .label { font-weight: 600; margin: 1.2em 0 0.2em 0; font-size: 1.07em; color: #54585f;}
+    .section { display: flex; flex-wrap: wrap; gap: 0.55em; margin-bottom: 0.3em;}
+    .block-btn { padding: 8px 17px; font-size: 15.5px; border: none; border-radius: 13px; font-weight: 600; letter-spacing: 1px; margin-bottom: 6px; margin-right: 3px; cursor: pointer; box-shadow: 0 1px 7px rgba(0,0,0,0.06); transition: transform 0.14s, box-shadow 0.19s; backdrop-filter: blur(18px) saturate(1.12); opacity: 0.96;}
     .block-btn:active { transform: scale(0.95);}
     .green { background: rgba(200,255,200,0.7);}
     .blue { background: rgba(189,219,255,0.82);}
     .gray { background: rgba(239,239,239,0.87);}
     .pink { background: rgba(255,209,229,0.77);}
     .purple { background: rgba(216,203,255,0.84);}
-    .timeline-area-flex {
-      display: flex; align-items: flex-start; justify-content: flex-start;
-      background: rgba(248,252,255,0.63);
-      border-radius: 16px;
-      min-height: 72px;
-      margin: 2em 0 1.5em 0;
-      box-shadow: 0 1px 7px rgba(120,140,190,0.07);
-      padding: 16px 12px 15px 13px;
-      overflow-x: auto;
-    }
+    .timeline-area-flex { display: flex; align-items: flex-start; justify-content: flex-start; background: rgba(248,252,255,0.63); border-radius: 16px; min-height: 92px; margin: 2em 0 1.5em 0; box-shadow: 0 1px 7px rgba(120,140,190,0.07); padding: 16px 12px 15px 13px; overflow-x: auto;}
     .timeline-area { display: flex; flex-wrap: wrap; gap: 11px 9px;}
-    .timeline-block {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      border-radius: 13px;
-      min-width: 74px;
-      max-width: 160px;
-      padding: 7px 14px 5px 14px;
-      font-size: 15.4px;
-      font-weight: 500;
-      letter-spacing: 0.8px;
-      box-shadow: 0 2px 7px rgba(120,150,170,0.06);
-      backdrop-filter: blur(19px) saturate(1.18);
-      margin: 0 0 3px 0;
-      margin-right: 0;
-    }
-    .timeline-content-row {
-      display: flex; align-items: center; gap: 0;
-      width: 100%;
-      justify-content: center;
-    }
-    .timeline-block .del-btn {
-      position: absolute; top: 4px; right: 4px;
-      background: rgba(255,90,90,0.88);
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 11px; height: 11px;
-      font-size: 7.5px; line-height: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      padding: 0;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0.5px 2px rgba(180,0,0,0.08);
-      transition: background 0.19s, transform 0.12s;
-      z-index: 2;
-    }
-    .timeline-block .del-btn:hover { background: #bc2525; transform: scale(1.07);}
-    .timeline-block .time-hhmm {
-      font-size: 12.6px;
-      font-weight: 500;
-      color: #5c5c5c;
-      margin-top: 0.9em;
-      letter-spacing: 0.6px;
-      opacity: 0.82;
-    }
-    .timeline-block .arrow {
-      font-size: 21px;
-      color: #b8b8b8;
-      margin-left: 5px;
-      user-select: none;
-      pointer-events: none;
-      display: inline-block;
-    }
-    .custom-input {
-      padding: 7px 12px;
-      border-radius: 8px;
-      border: 1px solid #bbc7d2;
-      margin-right: 4px;
-      font-size: 15px;
-      outline: none;
-      background: #f9fcff;
-      box-shadow: 0 1px 4px rgba(110,160,200,0.03);
-    }
-    .summary-bar {
-      font-size: 1.08em;
-      font-weight: 600;
-      letter-spacing: 0.8px;
-      min-width: 255px;
-      color: #535353;
-      text-align: left;
-      margin-top: 8px;
-      margin-left: 18px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      justify-content: flex-end;
-    }
-    .summary-row {
-      margin-bottom: 5px;
-    }
-    .ios-timeline-flexwrap {
-      display: flex; align-items: flex-start; justify-content: space-between;
-    }
-    .starttime-row {
-      display: flex; align-items: center; justify-content: flex-end;
-      gap: 10px; margin: 18px 0 8px 0;
-    }
+    .timeline-block { display: inline-flex; flex-direction: column; align-items: center; position: relative; border-radius: 13px; min-width: 90px; max-width: 180px; padding: 7px 10px 8px 10px; font-size: 15.1px; font-weight: 500; letter-spacing: 0.8px; box-shadow: 0 2px 7px rgba(120,150,170,0.06); backdrop-filter: blur(19px) saturate(1.18); margin: 0 0 3px 0; margin-right: 0; transition: box-shadow 0.19s;}
+    .timeline-block .del-btn { position: absolute; top: 3.5px; right: 3.5px; background: rgba(255,90,90,0.88); color: #fff; border: none; border-radius: 50%; width: 9px; height: 9px; font-size: 5.6px; line-height: 8px; cursor: pointer; font-weight: bold; padding: 0; display: flex; align-items: center; justify-content: center; box-shadow: 0 0.5px 2px rgba(180,0,0,0.08); transition: background 0.19s, transform 0.12s; z-index: 2;}
+    .timeline-block .del-btn:hover { background: #bc2525; transform: scale(1.1);}
+    .timeline-row-1 { font-weight: 900; font-size: 16px; }
+    .timeline-row-2 { font-weight: 400; font-size: 13.5px; margin-top:1px; color: #696b70; min-height:17px;}
+    .timeline-row-3 { font-weight: 500; font-size: 12.8px; color: #355; letter-spacing: 0.2px; margin-top: 1px;}
+    .timeline-block .arrow { font-size: 23px; color: #b8b8b8; margin-left: 5px; user-select: none; pointer-events: none; display: inline-block;}
+    .custom-input { padding: 7px 12px; border-radius: 8px; border: 1px solid #bbc7d2; margin-right: 4px; font-size: 15px; outline: none; background: #f9fcff; box-shadow: 0 1px 4px rgba(110,160,200,0.03);}
+    .summary-bar { font-size: 1.08em; font-weight: 600; letter-spacing: 0.8px; min-width: 255px; color: #535353; text-align: left; margin-top: 8px; margin-left: 18px; display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end;}
+    .summary-row { margin-bottom: 5px;}
+    .ios-timeline-flexwrap { display: flex; align-items: flex-start; justify-content: space-between;}
+    .starttime-row { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin: 18px 0 8px 0;}
     @media (max-width:900px){
       .container {max-width: 99vw;}
       .timeline-area-flex {padding-right: 5px;}
@@ -236,7 +121,7 @@
     </div>
     <div class="starttime-row">
       <span>出發時間：</span>
-      <input type="time" id="startTime" value="04:00" class="custom-input" style="width:100px;"/>
+      <input type="time" id="startTime" value="06:00" class="custom-input" style="width:100px;"/>
     </div>
   </div>
   <script>
@@ -254,64 +139,80 @@
       const timeline = document.getElementById('timeline');
       timeline.innerHTML = '';
       let totalMin = 0;
-      timelineData.forEach((block, idx) => {
-        if(['路程','等待','提貨時間','卸貨時間'].includes(block.type)) totalMin += block.minute;
-        // 方塊渲染
-        const node = document.createElement('div');
+      let startStr = document.getElementById('startTime').value || '06:00';
+      let [h, m] = startStr.split(':').map(x=>parseInt(x,10));
+      let nowMin = h*60 + m;
+      // 方塊render
+      for(let i=0;i<timelineData.length;i++) {
+        let block = timelineData[i];
+        let node = document.createElement('div');
         node.className = `timeline-block ${block.color}`;
-        // 行內容
-        let contentRow = document.createElement('div');
-        contentRow.className = "timeline-content-row";
-        let labelSpan = document.createElement('span');
-        labelSpan.innerHTML = block.label;
-        contentRow.appendChild(labelSpan);
-        // ➜ 只出現在路程
-        if(block.type === '路程') {
-          let arrow = document.createElement('span');
-          arrow.className = 'arrow';
-          arrow.innerHTML = '➜';
-          contentRow.appendChild(arrow);
-        }
-        node.appendChild(contentRow);
-
-        // 時間顯示
-        if(block.type.endsWith('時間') || block.type==='路程' || block.type==='等待') {
-          let timeDiv = document.createElement('div');
-          timeDiv.className = 'time-hhmm';
-          timeDiv.innerText = toHHMM(block.minute);
-          node.appendChild(timeDiv);
-        }
         // 刪除按鈕
         let delBtn = document.createElement('button');
         delBtn.className = 'del-btn';
         delBtn.innerHTML = '&times;';
-        delBtn.onclick = () => delBlock(block.groupId);
+        delBtn.onclick = () => delBlockAndAfter(i);
         node.appendChild(delBtn);
 
+        // 三行格式
+        let row1 = document.createElement('div');
+        let row2 = document.createElement('div');
+        let row3 = document.createElement('div');
+        row1.className = 'timeline-row-1';
+        row2.className = 'timeline-row-2';
+        row3.className = 'timeline-row-3';
+
+        // 第一行
+        if(['提貨點','卸貨點'].includes(block.type)) row1.innerText = (block.type==='提貨點'?'提貨點':'卸貨點');
+        else if(block.type==='路程') row1.innerText = '路程';
+        else if(block.type==='等待') row1.innerText = '等待';
+        else if(block.type==='提貨時間') row1.innerText = '提貨時間';
+        else if(block.type==='卸貨時間') row1.innerText = '卸貨時間';
+
+        // 第二行
+        if(block.type==='路程'||block.type==='等待'||block.type==='提貨時間'||block.type==='卸貨時間'){
+          if(block.type==='路程' || block.type==='等待') row2.innerText = toHHMM(block.minute);
+          else row2.innerText = toHHMM(block.minute);
+        } else {
+          row2.innerText = block.label && !['提貨點','卸貨點'].includes(block.type) ? block.label : '';
+        }
+
+        // 第三行
+        row3.innerText = toHHMM(nowMin + totalMin);
+
+        // 組合
+        node.appendChild(row1);
+        node.appendChild(row2);
+        node.appendChild(row3);
+
+        // 箭頭
+        if(block.type==='路程') {
+          let arrow = document.createElement('span');
+          arrow.className = 'arrow';
+          arrow.innerHTML = '➜';
+          node.appendChild(arrow);
+        }
         timeline.appendChild(node);
-      });
+        // 工時累加
+        if(['路程','等待','提貨時間','卸貨時間'].includes(block.type)) totalMin += block.minute;
+      }
       // 總結
-      let st = document.getElementById('startTime').value || '00:00';
-      let h = parseInt(st.split(':')[0]||'0',10), m = parseInt(st.split(':')[1]||'0',10);
+      let minStr = toHHMM(totalMin);
       let endMins = h*60 + m + totalMin;
       let eh = Math.floor(endMins/60)%24, em = endMins%60;
       let endStr = `${eh.toString().padStart(2,'0')}:${em.toString().padStart(2,'0')}`;
-      let minStr = toHHMM(totalMin);
-      document.getElementById('summary').innerHTML =
-        `<div class="summary-row">總工時：${totalMin} 分鐘｜${minStr}</div><div class="summary-row">預計結束時間：${endStr}</div>`;
+      document.getElementById('summary').innerHTML = `<div class="summary-row">總工時：${totalMin} 分鐘｜${minStr}</div><div class="summary-row">預計結束時間：${endStr}</div>`;
     }
 
-    function delBlock(groupId) {
-      timelineData = timelineData.filter(block => block.groupId !== groupId);
+    function delBlockAndAfter(idx) {
+      timelineData = timelineData.slice(0, idx);
       updateTimeline();
     }
-
     function addBlock(type, label, color) {
       groupCounter++;
       timelineData.push({type, label, color, minute: 0, groupId: groupCounter});
       updateTimeline();
     }
-
     function addCustomBlock(type) {
       let inputId = (type === '提貨點') ? 'pickupInput' : 'dropInput';
       let color = (type === '提貨點') ? 'green' : 'blue';
@@ -320,7 +221,6 @@
       addBlock(type, txt, color);
       document.getElementById(inputId).value = '';
     }
-
     // 合併時間邏輯
     function addTimeBlock(type, min, color) {
       let last = timelineData.length ? timelineData[timelineData.length-1] : null;
@@ -328,14 +228,12 @@
         last.minute += min;
       } else {
         groupCounter++;
-        let label = (type==='路程'?'路程':type==='等待'?'等待':type==='提貨時間'?'提貨時間':'卸貨時間');
+        let label = type;
         timelineData.push({type, label, color, minute: min, groupId: groupCounter});
       }
       updateTimeline();
     }
     document.getElementById('startTime').addEventListener('input', updateTimeline);
-
-    // 頁面初次載入時自動刷新
     window.onload = updateTimeline;
   </script>
 </body>
