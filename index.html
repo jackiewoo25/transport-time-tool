@@ -6,65 +6,206 @@
   <title>運輸流程時間線工具</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&display=swap" rel="stylesheet">
   <style>
-    html, body { background: linear-gradient(135deg, #e9eef7 0%, #f6f9fe 100%); margin:0; padding:0; font-family: 'Noto Sans TC', 'San Francisco', 'PingFang TC', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
-    .container { max-width: 950px; margin: 28px auto 18px auto; background: rgba(255,255,255,0.55); border-radius: 22px; box-shadow: 0 8px 32px rgba(30,40,110,0.07), 0 1.5px 8px rgba(180,190,220,0.09); padding: 2.1em 1.5em 1.2em 1.5em; backdrop-filter: blur(16px) saturate(1.25);}
-    h1 { text-align: center; margin-bottom: 1.1em; letter-spacing: 1.2px; font-size: 2em; font-weight: 600;}
-    .label { font-weight: 600; margin: 1.2em 0 0.2em 0; font-size: 1.07em; color: #54585f;}
-    .section { display: flex; flex-wrap: wrap; gap: 0.55em; margin-bottom: 0.3em;}
-    .block-btn { padding: 8px 17px; font-size: 15.5px; border: none; border-radius: 13px; font-weight: 600; letter-spacing: 1px; margin-bottom: 6px; margin-right: 3px; cursor: pointer; box-shadow: 0 1px 7px rgba(0,0,0,0.06); transition: transform 0.14s, box-shadow 0.19s; backdrop-filter: blur(18px) saturate(1.12); opacity: 0.96;}
-    .block-btn:active { transform: scale(0.95);}
-    .green { background: rgba(200,255,200,0.7);}
-    .blue { background: rgba(189,219,255,0.82);}
-    .gray { background: rgba(239,239,239,0.87);}
-    .pink { background: rgba(255,209,229,0.77);}
-    .purple-l { background: rgba(205,188,255,0.85);}   /* 提貨時間：淺紫 */
-    .purple-d { background: rgba(163,137,255,0.80);}   /* 卸貨時間：深紫 */
-    .timeline-area-flex { display: flex; align-items: flex-start; justify-content: flex-start; background: rgba(248,252,255,0.63); border-radius: 16px; min-height: 92px; margin: 2em 0 1.5em 0; box-shadow: 0 1px 7px rgba(120,140,190,0.07); padding: 16px 12px 15px 13px; overflow-x: auto;}
-    .timeline-area { display: flex; flex-wrap: wrap; gap: 13px 9px;}
-    .timeline-block { display: inline-flex; flex-direction: column; align-items: center; position: relative; border-radius: 13px; min-width: 90px; max-width: 180px; padding: 7px 10px 8px 10px; font-size: 15.1px; font-weight: 500; letter-spacing: 0.8px; box-shadow: 0 2px 7px rgba(120,150,170,0.06); backdrop-filter: blur(19px) saturate(1.18); margin: 0 0 3px 0; margin-right: 0; transition: box-shadow 0.19s;}
-    .timeline-block .del-btn { position: absolute; top: 3.5px; right: 3.5px; background: rgba(255,90,90,0.88); color: #fff; border: none; border-radius: 50%; width: 9px; height: 9px; font-size: 5.6px; line-height: 8px; cursor: pointer; font-weight: bold; padding: 0; display: flex; align-items: center; justify-content: center; box-shadow: 0 0.5px 2px rgba(180,0,0,0.08); transition: background 0.19s, transform 0.12s; z-index: 2;}
-    .timeline-block .del-btn:hover { background: #bc2525; transform: scale(1.1);}
-    .timeline-row-1 { font-weight: 900; font-size: 16px; }
-    .timeline-row-2 { font-weight: 400; font-size: 13.5px; margin-top:1px; color: #696b70; min-height:17px;}
-    .timeline-row-3 { font-weight: 900; font-size: 17px; color: #244D4E; letter-spacing: 0.1px; margin-top: 2.5px;}
-    .custom-input { padding: 7px 12px; border-radius: 8px; border: 1px solid #bbc7d2; margin-right: 4px; font-size: 15px; outline: none; background: #f9fcff; box-shadow: 0 1px 4px rgba(110,160,200,0.03);}
-    .summary-bar { font-size: 1.08em; font-weight: 600; letter-spacing: 0.8px; min-width: 255px; color: #535353; text-align: right; margin-top: 8px; display: flex; flex-direction: row; align-items: center; justify-content: flex-end; gap: 20px;}
-    .summary-row { margin-bottom: 5px; margin-right: 14px;}
-    .ios-timeline-flexwrap { display: flex; align-items: flex-start; justify-content: space-between;}
-    .starttime-row { display: flex; align-items: center; gap: 8px; margin: 0 0 0 0;}
-    .start-label { font-size: 16px; font-weight: 600; color: #333; margin-right: 2px;}
-    @media (max-width:900px){
-      .container {max-width: 99vw;}
-      .timeline-area-flex {padding-right: 5px;}
-      .ios-timeline-flexwrap { flex-direction: column; }
-      .summary-bar { margin-left: 0; margin-top: 18px;}
-      .starttime-row {justify-content: flex-start;}
-      .timeline-block .del-btn {
-  position: absolute;
-  top: 3.5px; right: 3.5px;
-  background: #ff2222;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 15px;
-  height: 15px;
-  font-size: 11px;
-  line-height: 14px;
-  cursor: pointer;
-  font-weight: bold;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0.5px 2px rgba(180,0,0,0.08);
-  transition: background 0.19s, transform 0.12s;
-  z-index: 2;
-}
-.timeline-block .del-btn:hover {
-  background: #c91010;
-  transform: scale(1.14);}
+    html, body {
+      background: linear-gradient(135deg, #d7e8fa 0%, #e9eef7 52%, #f6faff 100%);
+      margin: 0; padding: 0;
+      font-family: 'San Francisco', 'Noto Sans TC', 'PingFang TC', 'Helvetica Neue', Arial, sans-serif;
+      color: #23272E;
     }
-  
+    .container {
+      max-width: 980px;
+      margin: 36px auto 18px auto;
+      background: rgba(255,255,255,0.60);
+      border-radius: 28px;
+      box-shadow: 0 10px 40px 0 rgba(80,130,255,0.13), 0 2px 12px 0 rgba(30,80,150,0.08);
+      padding: 2.3em 2em 1.4em 2em;
+      backdrop-filter: blur(33px) saturate(1.17) brightness(1.08) contrast(1.12);
+      overflow: hidden;
+    }
+    h1 {
+      text-align: center;
+      font-weight: 800;
+      font-size: 2.18em;
+      letter-spacing: 1.6px;
+      color: #111217;
+      margin-bottom: 1.9em;
+      text-shadow: 0 2.5px 6px rgba(170,220,255,0.11), 0 1px 5px rgba(60,120,210,0.05);
+    }
+    .label {
+      font-weight: 700;
+      font-size: 1.17em;
+      color: #295AAC;
+      margin: 1.6em 0 0.3em 0;
+      letter-spacing: 1.1px;
+      text-shadow: 0 1px 6px rgba(180,210,255,0.07);
+    }
+    .section {
+      display: flex; flex-wrap: wrap; gap: 0.7em; margin-bottom: 0.36em;
+    }
+    .block-btn {
+      padding: 10px 22px;
+      border: none;
+      border-radius: 19px;
+      font-weight: 700;
+      font-size: 17.3px;
+      margin-bottom: 8px;
+      margin-right: 5px;
+      cursor: pointer;
+      letter-spacing: 0.8px;
+      box-shadow: 0 2.5px 11px rgba(66,112,200,0.07);
+      opacity: 0.97;
+      transition: transform 0.13s, box-shadow 0.13s, background 0.19s;
+      backdrop-filter: blur(25px) saturate(1.12);
+      user-select: none;
+      outline: none;
+    }
+    .block-btn:active { transform: scale(0.96);}
+    .block-btn.green {
+      background: linear-gradient(110deg, #33C17D 62%, #72ffd8 100%);
+      color: #fff; border: none;
+      box-shadow: 0 2px 10px rgba(40,180,110,0.11);
+    }
+    .block-btn.blue {
+      background: linear-gradient(115deg, #2C74FF 58%, #81c9ff 100%);
+      color: #fff; border: none;
+      box-shadow: 0 2px 13px rgba(40,110,255,0.10);
+    }
+    .block-btn.gray {
+      background: linear-gradient(115deg, #f4f7fc 72%, #e9ebf1 100%);
+      color: #23272E;
+      border: 1.4px solid #CFD6E4;
+      box-shadow: 0 2px 10px rgba(180,190,220,0.08);
+    }
+    .block-btn.pink {
+      background: linear-gradient(120deg, #FFB5C8 60%, #FFA0BF 100%);
+      color: #701A36;
+      box-shadow: 0 2px 10px rgba(230,120,170,0.10);
+    }
+    .block-btn.purple-l {
+      background: linear-gradient(110deg, #B6A8FF 65%, #e7e2ff 100%);
+      color: #442C74;
+      box-shadow: 0 2px 10px rgba(150,120,255,0.11);
+    }
+    .block-btn.purple-d {
+      background: linear-gradient(110deg, #735AE6 61%, #B9A8FF 100%);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(110,90,200,0.10);
+    }
+    .custom-input {
+      padding: 8px 15px;
+      border-radius: 12px;
+      border: 1.3px solid #B6C8E8;
+      font-size: 17px;
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 2px 8px rgba(100,160,200,0.07);
+      outline: none;
+      margin-right: 8px;
+      font-weight: 600;
+    }
+    .summary-bar {
+      font-size: 1.17em;
+      font-weight: 700;
+      min-width: 285px;
+      color: #1E2530;
+      text-align: left;
+      margin: 0.7em 0 1.4em 0;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 40px;
+      letter-spacing: 0.5px;
+    }
+    .starttime-row { display: flex; align-items: center; gap: 11px; }
+    .start-label { font-size: 17px; font-weight: 800; color: #265B7D; margin-right: 3px;}
+    .timeline-area-flex {
+      display: flex; align-items: flex-start; justify-content: flex-start;
+      background: rgba(255,255,255,0.52); border-radius: 26px;
+      min-height: 125px; margin: 0.2em 0 1.7em 0;
+      box-shadow: 0 3px 25px rgba(65,110,220,0.12);
+      padding: 30px 20px 28px 20px; overflow-x: auto;
+      /* Glass morph reflection 光影 */
+      position: relative;
+    }
+    .timeline-area { display: flex; flex-wrap: wrap; gap: 20px 15px;}
+    .timeline-block {
+      display: inline-flex; flex-direction: column; align-items: center; position: relative;
+      border-radius: 25px; min-width: 122px; max-width: 222px; padding: 12px 15px 18px 15px;
+      font-size: 18px; font-weight: 700; letter-spacing: 0.9px;
+      margin: 0 0 10px 0; margin-right: 0;
+      background: rgba(255,255,255,0.69);
+      box-shadow: 0 3px 26px rgba(80,180,255,0.14), 0 3px 10px rgba(170,180,220,0.13);
+      backdrop-filter: blur(37px) saturate(1.17) brightness(1.07);
+      border: 2.5px solid rgba(255,255,255,0.43);
+      overflow: hidden;
+      position: relative;
+      transition: box-shadow 0.17s;
+    }
+    .timeline-block.green {
+      background: linear-gradient(114deg, #41df96 70%, #e8fff3 100%);
+      color: #1a4d31;
+      border: 2.5px solid #70fad1;
+      text-shadow: 0 1px 3px rgba(65,200,140,0.04);
+    }
+    .timeline-block.blue {
+      background: linear-gradient(115deg, #4078FF 77%, #ecf2ff 100%);
+      color: #214177;
+      border: 2.5px solid #89beff;
+      text-shadow: 0 1px 3px rgba(55,120,255,0.05);
+    }
+    .timeline-block.gray {
+      background: linear-gradient(115deg, #f6f7fa 79%, #e9ebf1 100%);
+      color: #23272E;
+      border: 2.5px solid #e2e7f4;
+    }
+    .timeline-block.pink {
+      background: linear-gradient(117deg, #FFD7EC 74%, #fff6fa 100%);
+      color: #701A36;
+      border: 2.5px solid #ffa0bf;
+    }
+    .timeline-block.purple-l {
+      background: linear-gradient(114deg, #b9a8ff 67%, #f6f3ff 100%);
+      color: #442C74;
+      border: 2.5px solid #ceb9ff;
+    }
+    .timeline-block.purple-d {
+      background: linear-gradient(112deg, #9d8aff 73%, #e5dbff 100%);
+      color: #fff;
+      border: 2.5px solid #735ae6;
+    }
+    .timeline-block .del-btn {
+      position: absolute;
+      top: 12px; right: 14px;
+      background: #FF2D55;
+      color: #fff; border: none; border-radius: 50%;
+      width: 24px; height: 24px; font-size: 17px;
+      line-height: 22px; cursor: pointer; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2.5px 10px rgba(255,50,90,0.15);
+      z-index: 2; opacity: 0.97;
+      transition: background 0.15s, transform 0.13s;
+    }
+    .timeline-block .del-btn:hover { background: #C90E2A; transform: scale(1.11);}
+    .timeline-row-1 {
+      font-weight: 800; font-size: 1.14em; letter-spacing: 1.25px; margin-bottom: 3px;
+      text-align: center; color: #17181A;
+      text-shadow: 0 1px 5px rgba(140,200,255,0.06);
+    }
+    .timeline-row-2 {
+      font-weight: 500; font-size: 1em; color: #636B80; min-height:20px; margin-bottom: 2.5px;
+      letter-spacing: 1.1px;
+    }
+    .timeline-row-3 {
+      font-weight: 900; font-size: 1.2em; color: #215C8E; letter-spacing: 0.08em;
+      margin-top: 5px; text-align:center;
+    }
+    @media (max-width:950px){
+      .container {max-width: 100vw; padding-left:4vw; padding-right:4vw;}
+      .timeline-area {gap: 12px 5px;}
+      .timeline-block {min-width:90px; padding:7px 7px 13px 7px;}
+    }
+    @media (max-width:570px){
+      h1 {font-size:1.27em;}
+      .timeline-block {min-width:78px;}
+      .block-btn {font-size:15px;}
+      .timeline-block .del-btn { width: 18px; height: 18px; font-size: 13px; }
+    }
   </style>
 </head>
 <body>
@@ -84,9 +225,37 @@
     </div>
     <div class="label">卸貨點</div>
     <div class="section" id="dropSection" style="max-width:100%;">
-      <!-- 全部卸貨點 ...（省略）... -->
+      <button class="block-btn blue" onclick="addBlock('卸貨點','鹿港銀泰','blue')">鹿港銀泰</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','矽品潭子大','blue')">矽品潭子大</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','友達后里備用','blue')">友達后里備用</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','環鴻新桶','blue')">環鴻新桶</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','環鴻南崗','blue')">環鴻南崗</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','美光后里','blue')">美光后里</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','美光AATT','blue')">美光AATT</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','展頌斗六','blue')">展頌斗六</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','展頌竹山','blue')">展頌竹山</button>
-      <!-- 其他卸貨點按鈕同上 -->
+      <button class="block-btn blue" onclick="addBlock('卸貨點','矽品潭子小','blue')">矽品潭子小</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','晉椿','blue')">晉椿</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','松和50N','blue')">松和50N</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','久允工業','blue')">久允工業</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','明基材料','blue')">明基材料</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','艾杰旭一期','blue')">艾杰旭一期</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','菱生中港','blue')">菱生中港</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','菱生2廠','blue')">菱生2廠</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','菱生5廠','blue')">菱生5廠</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','菱生1廠','blue')">菱生1廠</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','矽品和美一期','blue')">矽品和美一期</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','矽品和美二期','blue')">矽品和美二期</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','超豐頭份','blue')">超豐頭份</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','烏日啤酒','blue')">烏日啤酒</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','中油台中80N','blue')">中油台中80N</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','台灣特品','blue')">台灣特品</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','台大氣體','blue')">台大氣體</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','巨菱精密','blue')">巨菱精密</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','亞洲光學','blue')">亞洲光學</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','美光FBT','blue')">美光FBT</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','隆達竹南廠','blue')">隆達竹南廠</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','旺宏新竹735A','blue')">旺宏新竹735A</button>
       <input type="text" id="dropInput" class="custom-input" placeholder="手動輸入"/>
       <button class="block-btn blue" onclick="addCustomBlock('卸貨點')">新增</button>
     </div>
@@ -111,21 +280,17 @@
       <button class="block-btn purple-d" onclick="addTimeBlock('卸貨時間', 30, 'purple-d')">卸貨 30分鐘</button>
       <button class="block-btn purple-d" onclick="addTimeBlock('卸貨時間', 60, 'purple-d')">卸貨 60分鐘</button>
     </div>
-    <div class="label" style="margin-top:1.7em;"></div>
-
-    <!-- 出發時間獨立一欄，整頁只建立一次 input，不重複渲染！ -->
-    <div class="summary-bar" style="margin-top:10px; margin-bottom:10px; justify-content: flex-start;">
+    <div class="label" style="margin-top:1.5em;"></div>
+    <div class="summary-bar" style="margin-bottom: 4px;">
       <span class="starttime-row">
         <span class="start-label">出發時間：</span>
-        <input type="time" id="startTime" value="06:00" class="custom-input" style="width:100px;"/>
+        <input type="time" id="startTime" value="06:00" class="custom-input" style="width:110px;"/>
       </span>
       <span class="summary-row" id="endTimeLabel"></span>
       <span class="summary-row" id="workTimeLabel"></span>
     </div>
-    <div class="ios-timeline-flexwrap">
-      <div class="timeline-area-flex">
-        <div class="timeline-area" id="timeline"></div>
-      </div>
+    <div class="timeline-area-flex">
+      <div class="timeline-area" id="timeline"></div>
     </div>
   </div>
   <script>
