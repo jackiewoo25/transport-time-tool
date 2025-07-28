@@ -63,24 +63,43 @@
       text-align:center;
       line-height: 1.11;
     }
-    .custom-input { padding: 7px 11px; border-radius: 8px; border: 1px solid #b7cae5; margin-right: 4px; font-size: 15px; outline: none; background: #f8fcfe; box-shadow: 0 1px 3px rgba(110,160,200,0.03);}
-    .summary-bar { font-size: 1.11em; font-weight: 700; letter-spacing: 0.7px; min-width: 255px; color: #354753; text-align: right; margin-top: 5px; display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 21px;}
+    .custom-input, .custom-select {
+      padding: 7px 11px; border-radius: 8px; border: 1px solid #b7cae5; margin-right: 4px; font-size: 15px; outline: none; background: #f8fcfe; box-shadow: 0 1px 3px rgba(110,160,200,0.03);
+    }
+    .summary-bar2 {
+      font-size: 1.07em; font-weight: 700; letter-spacing: 0.6px; min-width: 255px; color: #354753; text-align: right; margin-top: 0; margin-bottom: 15px; display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 19px;
+    }
+    .summary-col { display: flex; align-items: center; gap: 5px;}
     .summary-row { margin-bottom: 4px; margin-right: 13px;}
     .ios-timeline-flexwrap { display: flex; align-items: flex-start; justify-content: space-between;}
-    .starttime-row { display: flex; align-items: center; gap: 8px; margin: 0 0 0 0;}
     .start-label { font-size: 17px; font-weight: 700; color: #336; margin-right: 2px;}
     @media (max-width:900px){
       .container {max-width: 99vw;}
       .timeline-area-flex {padding-right: 2px;}
       .ios-timeline-flexwrap { flex-direction: column; }
-      .summary-bar { margin-left: 0; margin-top: 10px;}
-      .starttime-row {justify-content: flex-start;}
+      .summary-bar2 { flex-direction: column; gap:6px; align-items: flex-start;}
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>運輸流程時間線工具</h1>
+    <!-- summary bar：槽車號碼、出發、預計回場、總工時 -->
+    <div class="summary-bar2">
+      <div class="summary-col">
+        <span class="start-label">槽車號碼：</span>
+        <select id="trailerSelect" class="custom-select">
+          <option value="51V841_275">51V841_275</option>
+          <option value="51V836_270">51V836_270</option>
+        </select>
+      </div>
+      <div class="summary-col">
+        <span class="start-label">出發時間：</span>
+        <input type="time" id="startTime" value="06:00" class="custom-input" style="width:100px;"/>
+      </div>
+      <div class="summary-col" id="endTimeLabel"></div>
+      <div class="summary-col" id="workTimeLabel"></div>
+    </div>
     <div class="label">提貨點</div>
     <div class="section" id="pickupSection">
       <button class="block-btn green" onclick="addBlock('提貨點','車場','green')">車場</button>
@@ -149,14 +168,6 @@
       <button class="block-btn drop" onclick="addTimeBlock('卸貨時間', 15, 'drop')">卸貨 15分鐘</button>
       <button class="block-btn drop" onclick="addTimeBlock('卸貨時間', 30, 'drop')">卸貨 30分鐘</button>
       <button class="block-btn drop" onclick="addTimeBlock('卸貨時間', 60, 'drop')">卸貨 60分鐘</button>
-    </div>
-    <div class="summary-bar" style="margin-top:10px; margin-bottom:10px; justify-content: flex-start;">
-      <span class="starttime-row">
-        <span class="start-label">出發時間：</span>
-        <input type="time" id="startTime" value="06:00" class="custom-input" style="width:100px;"/>
-      </span>
-      <span class="summary-row" id="endTimeLabel"></span>
-      <span class="summary-row" id="workTimeLabel"></span>
     </div>
     <div class="ios-timeline-flexwrap">
       <div class="timeline-area-flex">
