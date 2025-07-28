@@ -4,91 +4,258 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>運輸流程時間線工具</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Noto Sans TC', sans-serif;
-      background: linear-gradient(to right, #e0ecf8, #f7faff);
-      margin: 0;
-      padding: 2rem;
+      background: linear-gradient(120deg, #ddefff 0%, #f3f9ff 100%);
+      margin: 0; padding: 0; min-height: 100vh;
+    }
+    .container {
+      max-width: 900px;
+      margin: 32px auto;
+      background: rgba(255,255,255,0.55);
+      border-radius: 18px;
+      box-shadow: 0 4px 18px rgba(55,120,180,0.08);
+      padding: 2.2em 1.5em 2em 1.5em;
+      backdrop-filter: blur(12px);
     }
     h1 {
       text-align: center;
+      margin-bottom: 1.2em;
+      letter-spacing: 1px;
     }
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      background: rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(20px);
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
-    .label {
-      font-weight: bold;
-      margin-top: 1rem;
-    }
-    .section {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin: 0.5rem 0 1rem;
-    }
-    .block {
-      padding: 0.5rem 1rem;
+    .label { font-weight: 600; margin-top: 1.5em; margin-bottom: 0.2em; }
+    .section { display: flex; flex-wrap: wrap; gap: 0.5em; margin-bottom: 0.2em; }
+    .block-btn {
+      padding: 8px 18px;
+      font-size: 16px;
+      border: none;
       border-radius: 12px;
-      color: #333;
-      font-weight: bold;
+      font-weight: 600;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+      margin-bottom: 6px;
+      margin-right: 4px;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-      transition: transform 0.1s;
+      transition: transform 0.14s;
+      backdrop-filter: blur(16px);
     }
-    .block:hover {
-      transform: scale(1.05);
+    .block-btn:active { transform: scale(0.95);}
+    .green { background: rgba(195,255,195,0.66);}
+    .blue { background: rgba(181,220,255,0.7);}
+    .gray { background: rgba(238,238,238,0.90);}
+    .pink { background: rgba(255,207,225,0.75);}
+    .purple { background: rgba(215,198,255,0.80);}
+    .timeline-area {
+      margin: 2em 0 1.5em 0;
+      background: rgba(250,255,255,0.67);
+      border-radius: 14px;
+      min-height: 64px;
+      padding: 20px 10px 16px 10px;
+      box-shadow: 0 1px 6px rgba(120,140,190,0.07);
+      display: flex; flex-wrap: wrap; gap: 8px;
     }
-    .green { background: rgba(200,255,200,0.7); }
-    .blue { background: rgba(200,225,255,0.7); }
-    .gray { background: rgba(255,255,200,0.7); }
-    .pink { background: rgba(255,200,225,0.7); }
-    .purple { background: rgba(220,200,255,0.7); }
+    .timeline-block {
+      display: inline-flex;
+      align-items: center;
+      margin: 3px 6px 3px 0;
+      padding: 7px 18px 7px 14px;
+      font-size: 15px;
+      border-radius: 11px;
+      font-weight: 500;
+      position: relative;
+      box-shadow: 0 1.5px 8px rgba(90,90,90,0.05);
+      backdrop-filter: blur(16px);
+    }
+    .timeline-block .del-btn {
+      margin-left: 8px;
+      font-size: 15px;
+      background: #fa5c5c;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 22px; height: 22px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 1px 6px rgba(255,80,80,0.13);
+      transition: background 0.17s;
+    }
+    .timeline-block .del-btn:hover { background: #b71c1c; }
+    .custom-input {
+      padding: 7px 11px;
+      border-radius: 7px;
+      border: 1px solid #bbc7d2;
+      margin-right: 4px;
+      font-size: 15px;
+      outline: none;
+    }
+    .summary-bar {
+      font-size: 1.11em;
+      font-weight: 600;
+      letter-spacing: 1px;
+      padding-top: 6px;
+    }
+    .type-select {
+      border-radius: 7px; border: 1px solid #bbc7d2; padding: 7px 5px;
+      font-size: 15px; margin-right: 7px; outline: none;
+    }
+    @media (max-width:600px){
+      .container{padding:0.7em;}
+      h1{font-size:20px;}
+      .timeline-area{padding:12px 2px;}
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>運輸流程時間線工具</h1>
     <div class="label">出發時間</div>
-    <input type="time" id="startTime" value="04:00" />
+    <input type="time" id="startTime" value="04:00" class="custom-input"/>
+    <!-- 提貨點 -->
     <div class="label">提貨點</div>
-    <div class="section">
-      <div class="block green">KY2</div>
-      <div class="block green">KY3</div>
-      <div class="block green">NK</div>
-      <div class="block green">KK</div>
+    <div class="section" id="pickupSection">
+      <button class="block-btn green" onclick="addBlock('提貨點','車場','green')">車場</button>
+      <button class="block-btn green" onclick="addBlock('提貨點','重車','green')">重車</button>
+      <button class="block-btn green" onclick="addBlock('提貨點','BOIG','green')">BOIG</button>
+      <button class="block-btn green" onclick="addBlock('提貨點','KY2','green')">KY2</button>
+      <button class="block-btn green" onclick="addBlock('提貨點','KY3','green')">KY3</button>
+      <button class="block-btn green" onclick="addBlock('提貨點','NK','green')">NK</button>
+      <button class="block-btn green" onclick="addBlock('提貨點','KK','green')">KK</button>
+      <input type="text" id="pickupInput" class="custom-input" placeholder="手動輸入"/>
+      <button class="block-btn green" onclick="addCustomBlock('提貨點')">新增</button>
     </div>
+    <!-- 卸貨點 -->
     <div class="label">卸貨點</div>
-    <div class="section">
-      <div class="block blue">鹿港銀泰</div>
-      <div class="block blue">矽品潭子大</div>
-      <div class="block blue">環鴻新桶</div>
+    <div class="section" id="dropSection" style="max-width:100%;">
+      <button class="block-btn blue" onclick="addBlock('卸貨點','鹿港銀泰','blue')">鹿港銀泰</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','矽品潭子大','blue')">矽品潭子大</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','友達后里備用','blue')">友達后里備用</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','環鴻新桶','blue')">環鴻新桶</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','環鴻南崗','blue')">環鴻南崗</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','美光后里','blue')">美光后里</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','展頌斗六','blue')">展頌斗六</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','展送竹山','blue')">展送竹山</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','矽品潭子小','blue')">矽品潭子小</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','晉椿','blue')">晉椿</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','松和50N','blue')">松和50N</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','久允工業','blue')">久允工業</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','明基材料','blue')">明基材料</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','艾杰旭一期','blue')">艾杰旭一期</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','菱生中港','blue')">菱生中港</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','菱生2廠','blue')">菱生2廠</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','菱生5廠','blue')">菱生5廠</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','菱生1廠','blue')">菱生1廠</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','矽品和美一期','blue')">矽品和美一期</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','矽品和美二期','blue')">矽品和美二期</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','超豐頭份','blue')">超豐頭份</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','烏日啤酒','blue')">烏日啤酒</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','中油台中80N','blue')">中油台中80N</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','台灣特品','blue')">台灣特品</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','台大氣體','blue')">台大氣體</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','巨菱精密','blue')">巨菱精密</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','亞洲光學','blue')">亞洲光學</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','美光FBT','blue')">美光FBT</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','隆達竹南廠','blue')">隆達竹南廠</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','旺宏新竹735A','blue')">旺宏新竹735A</button>
+      <input type="text" id="dropInput" class="custom-input" placeholder="手動輸入"/>
+      <button class="block-btn blue" onclick="addCustomBlock('卸貨點')">新增</button>
     </div>
+    <!-- 路程時間 -->
     <div class="label">路程時間</div>
     <div class="section">
-      <div class="block gray">15分鐘</div>
-      <div class="block gray">30分鐘</div>
-      <div class="block gray">60分鐘</div>
+      <button class="block-btn gray" onclick="addTimeBlock('路程', 15, 'gray')">15分鐘</button>
+      <button class="block-btn gray" onclick="addTimeBlock('路程', 30, 'gray')">30分鐘</button>
+      <button class="block-btn gray" onclick="addTimeBlock('路程', 60, 'gray')">60分鐘</button>
     </div>
+    <!-- 等待時間 -->
     <div class="label">等待時間</div>
     <div class="section">
-      <div class="block pink">15分鐘</div>
-      <div class="block pink">30分鐘</div>
-      <div class="block pink">60分鐘</div>
+      <button class="block-btn pink" onclick="addTimeBlock('等待', 15, 'pink')">15分鐘</button>
+      <button class="block-btn pink" onclick="addTimeBlock('等待', 30, 'pink')">30分鐘</button>
+      <button class="block-btn pink" onclick="addTimeBlock('等待', 60, 'pink')">60分鐘</button>
     </div>
-    <div class="label">提/卸貨時間</div>
+    <!-- 提貨/卸貨時間 -->
+    <div class="label">提貨/卸貨時間</div>
     <div class="section">
-      <div class="block purple">15分鐘</div>
-      <div class="block purple">30分鐘</div>
-      <div class="block purple">60分鐘</div>
+      <button class="block-btn purple" onclick="addTimeBlock('提貨時間', 15, 'purple')">提貨 15分鐘</button>
+      <button class="block-btn purple" onclick="addTimeBlock('提貨時間', 30, 'purple')">提貨 30分鐘</button>
+      <button class="block-btn purple" onclick="addTimeBlock('提貨時間', 60, 'purple')">提貨 60分鐘</button>
+      <button class="block-btn purple" onclick="addTimeBlock('卸貨時間', 15, 'purple')">卸貨 15分鐘</button>
+      <button class="block-btn purple" onclick="addTimeBlock('卸貨時間', 30, 'purple')">卸貨 30分鐘</button>
+      <button class="block-btn purple" onclick="addTimeBlock('卸貨時間', 60, 'purple')">卸貨 60分鐘</button>
     </div>
+    <!-- 時間線區 -->
+    <div class="label" style="margin-top:1.7em;">運輸流程時間線</div>
+    <div class="timeline-area" id="timeline"></div>
+    <div class="summary-bar" id="summary"></div>
   </div>
+  <script>
+    // 資料結構：{type, label, color, minute, groupId}
+    let timelineData = [];
+    let groupCounter = 0;
+
+    function updateTimeline() {
+      const timeline = document.getElementById('timeline');
+      timeline.innerHTML = '';
+      let totalMin = 0;
+      timelineData.forEach((block, idx) => {
+        // 計算總時數
+        if(['路程','等待','提貨時間','卸貨時間'].includes(block.type)) totalMin += block.minute;
+        // 方塊渲染
+        const node = document.createElement('div');
+        node.className = `timeline-block ${block.color}`;
+        if (block.type.endsWith('時間')) {
+          node.innerHTML = `${block.label}${block.minute}分鐘 <button class="del-btn" onclick="delBlock(${block.groupId})">×</button>`;
+        } else {
+          node.innerHTML = `${block.label} <button class="del-btn" onclick="delBlock(${block.groupId})">×</button>`;
+        }
+        timeline.appendChild(node);
+      });
+      // 總結
+      let st = document.getElementById('startTime').value || '00:00';
+      let h = parseInt(st.split(':')[0]||'0',10), m = parseInt(st.split(':')[1]||'0',10);
+      let endMins = h*60 + m + totalMin;
+      let eh = Math.floor(endMins/60)%24, em = endMins%60;
+      let endStr = `${eh.toString().padStart(2,'0')}:${em.toString().padStart(2,'0')}`;
+      document.getElementById('summary').innerText = `總工時：${totalMin} 分鐘｜預計結束時間：${endStr}`;
+    }
+
+    function delBlock(groupId) {
+      timelineData = timelineData.filter(block => block.groupId !== groupId);
+      updateTimeline();
+    }
+
+    function addBlock(type, label, color) {
+      groupCounter++;
+      timelineData.push({type, label, color, minute: 0, groupId: groupCounter});
+      updateTimeline();
+    }
+
+    function addCustomBlock(type) {
+      let inputId = (type === '提貨點') ? 'pickupInput' : 'dropInput';
+      let color = (type === '提貨點') ? 'green' : 'blue';
+      let txt = document.getElementById(inputId).value.trim();
+      if (!txt) return;
+      addBlock(type, txt, color);
+      document.getElementById(inputId).value = '';
+    }
+
+    // 合併時間邏輯
+    function addTimeBlock(type, min, color) {
+      let last = timelineData.length ? timelineData[timelineData.length-1] : null;
+      if(last && last.type === type && ['路程','等待','提貨時間','卸貨時間'].includes(type)) {
+        // 合併（更新 groupId 區塊分鐘）
+        last.minute += min;
+        last.label = type === '路程' ? '路程' : (type==='等待' ? '等待' : (type==='提貨時間' ? '提貨時間' : '卸貨時間'));
+      } else {
+        groupCounter++;
+        timelineData.push({type, label: (type==='路程'?'路程':type), color, minute: min, groupId: groupCounter});
+      }
+      updateTimeline();
+    }
+    // 時間改動即時刷新
+    document.getElementById('startTime').addEventListener('input', updateTimeline);
+  </script>
 </body>
 </html>
