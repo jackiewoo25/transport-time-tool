@@ -39,6 +39,31 @@
       .ios-timeline-flexwrap { flex-direction: column; }
       .summary-bar { margin-left: 0; margin-top: 18px;}
       .starttime-row {justify-content: flex-start;}
+      .timeline-block .del-btn {
+  position: absolute;
+  top: 3.5px; right: 3.5px;
+  background: #ff2222;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  font-size: 11px;
+  line-height: 14px;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0.5px 2px rgba(180,0,0,0.08);
+  transition: background 0.19s, transform 0.12s;
+  z-index: 2;
+}
+.timeline-block .del-btn:hover {
+  background: #c91010;
+  transform: scale(1.14);
+}
     }
   </style>
 </head>
@@ -59,8 +84,7 @@
     </div>
     <div class="label">卸貨點</div>
     <div class="section" id="dropSection" style="max-width:100%;">
-      <!-- 全部卸貨點 ...（省略）... -->
-           <button class="block-btn blue" onclick="addBlock('卸貨點','鹿港銀泰','blue')">鹿港銀泰</button>
+      <button class="block-btn blue" onclick="addBlock('卸貨點','鹿港銀泰','blue')">鹿港銀泰</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','矽品潭子大','blue')">矽品潭子大</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','友達后里','blue')">友達后里</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','環鴻新桶','blue')">環鴻新桶</button>
@@ -90,7 +114,6 @@
       <button class="block-btn blue" onclick="addBlock('卸貨點','亞洲光學','blue')">亞洲光學</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','美光FBT','blue')">美光FBT</button>
       <button class="block-btn blue" onclick="addBlock('卸貨點','隆達竹南廠','blue')">隆達竹南廠</button>
-      <!-- 其他卸貨點按鈕同上 -->
       <input type="text" id="dropInput" class="custom-input" placeholder="手動輸入"/>
       <button class="block-btn blue" onclick="addCustomBlock('卸貨點')">新增</button>
     </div>
