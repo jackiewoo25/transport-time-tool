@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>運輸流程時間線工具</title>
+  <title>運輸時間計算器</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@600;900&display=swap" rel="stylesheet">
   <style>
     html, body { background: linear-gradient(135deg, #edf2fb 0%, #e8f3fa 100%); margin:0; padding:0; font-family: 'Noto Sans TC', 'San Francisco', 'PingFang TC', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
@@ -234,7 +234,7 @@
       let endMins = nowMin + totalMin;
       let eh = Math.floor(endMins/60)%24, em = endMins%60;
       let endStr = `${eh.toString().padStart(2,'0')}:${em.toString().padStart(2,'0')}`;
-      document.getElementById('endTimeLabel').innerHTML = `預計結束時間：${endStr}`;
+      document.getElementById('endTimeLabel').innerHTML = `預計回場時間：${endStr}`;
       document.getElementById('workTimeLabel').innerHTML = `總工時：${totalMin} 分鐘｜${minStr}`;
     }
     function delBlockAndAfter(idx) {
