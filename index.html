@@ -3,152 +3,197 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>運輸流程時間線工具 | Liquid Glass Style</title>
+  <title>運輸流程時間線工具</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&display=swap" rel="stylesheet">
   <style>
     html, body {
-      background: linear-gradient(135deg, #dbeafe 0%, #f8fafc 45%, #e0e7ff 100%);
+      background: linear-gradient(135deg, #ddefff 0%, #f6f8fa 80%);
       margin: 0; padding: 0;
-      font-family: 'Noto Sans TC', 'San Francisco', 'PingFang TC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-    }
-    body::before {
-      /* 鏡面高光區塊 - 讓背景有現代感亮條紋 */
-      content: "";
-      position: fixed;
-      top: -5vw; left: -8vw; width: 160vw; height: 65vw;
-      background: linear-gradient(120deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.06) 70%, rgba(160,196,255,0.03) 100%);
-      pointer-events: none;
-      z-index: 0;
-      filter: blur(12px) brightness(1.04);
+      font-family: 'San Francisco', 'Noto Sans TC', 'PingFang TC', 'Helvetica Neue', Arial, sans-serif;
+      color: #23272E;
     }
     .container {
-      max-width: 1000px; margin: 40px auto 28px auto;
-      background: linear-gradient(125deg, rgba(240,245,255,0.83) 65%, rgba(185,210,255,0.54) 100%);
-      border-radius: 33px; box-shadow: 0 12px 36px 0 rgba(30,70,170,0.08), 0 2px 8px 0 rgba(185,220,255,0.11);
-      padding: 2.3em 1.7em 1.3em 1.7em;
-      backdrop-filter: blur(28px) saturate(1.25);
-      position: relative; z-index: 2;
-      border: 1.5px solid rgba(155,175,220,0.18);
-      overflow: visible;
-      box-shadow: 0 0 0 0 #fff, 0 1.5px 8px rgba(185,210,255,0.13);
-    }
-    .container::after {
-      /* 玻璃邊緣高光特效 */
-      content: "";
-      position: absolute; pointer-events: none;
-      left: 12px; top: 8px; right: 12px; bottom: 8px;
-      border-radius: 30px;
-      border: 1.5px solid rgba(255,255,255,0.17);
-      box-shadow: 0 2px 18px 0 rgba(255,255,255,0.08);
-      z-index: 0;
+      max-width: 970px;
+      margin: 36px auto 18px auto;
+      background: rgba(255,255,255,0.60);
+      border-radius: 28px;
+      box-shadow: 0 10px 36px 0 rgba(80,130,255,0.12), 0 2px 8px 0 rgba(30,80,150,0.07);
+      padding: 2.3em 1.8em 1.3em 1.8em;
+      backdrop-filter: blur(28px) saturate(1.18) brightness(1.08);
     }
     h1 {
       text-align: center;
-      margin-bottom: 1.0em; letter-spacing: 1.5px;
-      font-size: 2.22em; font-weight: 800;
-      color: #2651a2; background: linear-gradient(90deg, #2556B9 40%, #6788e7 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 2px 7px #b4d3ff33);
-      user-select: none;
+      font-weight: 700;
+      font-size: 2.2em;
+      letter-spacing: 1.2px;
+      color: #121416;
+      margin-bottom: 1.7em;
+      text-shadow: 0 1.5px 3px rgba(170,220,255,0.12);
     }
-    .label { font-weight: 600; margin: 1.4em 0 0.2em 0; font-size: 1.14em; color: #4c5f86;}
+    .label {
+      font-weight: 700;
+      font-size: 1.12em;
+      color: #27518C;
+      margin: 1.6em 0 0.4em 0;
+      letter-spacing: 1px;
+    }
     .section {
-      display: flex; flex-wrap: wrap; gap: 0.56em; margin-bottom: 0.3em;
+      display: flex; flex-wrap: wrap; gap: 0.7em; margin-bottom: 0.45em;
     }
     .block-btn {
-      padding: 9px 19px; font-size: 16px; border: none; border-radius: 16px;
-      font-weight: 600; letter-spacing: 1.1px; margin-bottom: 6px; margin-right: 3px; cursor: pointer;
-      box-shadow: 0 2px 12px rgba(76,109,140,0.11);
-      transition: transform 0.13s, box-shadow 0.16s, background 0.16s;
-      backdrop-filter: blur(16px) saturate(1.18);
+      padding: 9px 19px;
+      border: none;
+      border-radius: 18px;
+      font-weight: 600;
+      font-size: 17px;
+      margin-bottom: 7px;
+      margin-right: 4px;
+      cursor: pointer;
+      letter-spacing: 0.8px;
+      box-shadow: 0 2px 10px rgba(66,112,200,0.08);
       opacity: 0.96;
-      background: linear-gradient(120deg,rgba(255,255,255,0.45) 5%,rgba(180,200,255,0.18) 100%);
-      border: 1px solid rgba(120,160,245,0.14);
-      position: relative;
-      overflow: hidden;
+      transition: transform 0.14s, box-shadow 0.14s, background 0.18s;
+      backdrop-filter: blur(22px) saturate(1.15);
     }
-    .block-btn:active { transform: scale(0.93);}
-    .green { background: linear-gradient(100deg,rgba(220,255,225,0.76) 60%,rgba(175,255,220,0.33) 100%);}
-    .blue { background: linear-gradient(100deg,rgba(200,225,255,0.78) 60%,rgba(170,210,255,0.32) 100%);}
-    .gray { background: linear-gradient(100deg,rgba(245,245,245,0.82) 60%,rgba(220,225,250,0.22) 100%);}
-    .pink { background: linear-gradient(100deg,rgba(255,220,239,0.82) 60%,rgba(255,190,235,0.25) 100%);}
-    .purple-l { background: linear-gradient(100deg,rgba(222,208,255,0.85) 65%,rgba(196,169,255,0.33) 100%);}
-    .purple-d { background: linear-gradient(100deg,rgba(175,139,255,0.84) 58%,rgba(146,127,255,0.25) 100%);}
-    .block-btn::after {
-      content: "";
-      position: absolute; left: 0; top: 0; width: 100%; height: 100%;
-      background: linear-gradient(110deg,rgba(255,255,255,0.09) 0,rgba(255,255,255,0.16) 65%,rgba(200,220,255,0.04) 100%);
-      pointer-events: none;
-      border-radius: 16px;
+    .block-btn:active { transform: scale(0.96);}
+    .block-btn.green {
+      background: linear-gradient(120deg, #33C17D 60%, #60F2B1 100%);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(40,180,110,0.07);
     }
-    .block-btn:focus { outline: 2px solid #70a1ff99; }
+    .block-btn.blue {
+      background: linear-gradient(120deg, #2C74FF 60%, #5DC9FF 100%);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(40,110,255,0.10);
+    }
+    .block-btn.gray {
+      background: rgba(255,255,255,0.8);
+      color: #23272E;
+      border: 1.4px solid #C6CFDD;
+      box-shadow: 0 2px 10px rgba(180,190,220,0.09);
+    }
+    .block-btn.pink {
+      background: linear-gradient(120deg, #FFB5C8 60%, #FFA0BF 100%);
+      color: #662236;
+      box-shadow: 0 2px 10px rgba(230,120,170,0.09);
+    }
+    .block-btn.purple-l {
+      background: linear-gradient(120deg, #B8A9FF 60%, #E2D7FF 100%);
+      color: #442C74;
+      box-shadow: 0 2px 10px rgba(160,120,255,0.07);
+    }
+    .block-btn.purple-d {
+      background: linear-gradient(120deg, #735AE6 60%, #A48CFF 100%);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(110,90,200,0.09);
+    }
+    .custom-input {
+      padding: 7px 13px;
+      border-radius: 10px;
+      border: 1.3px solid #B9CCE7;
+      font-size: 16.5px;
+      background: rgba(255,255,255,0.87);
+      box-shadow: 0 2px 6px rgba(100,160,200,0.06);
+      outline: none;
+      margin-right: 7px;
+    }
+    .summary-bar {
+      font-size: 1.12em;
+      font-weight: 700;
+      min-width: 295px;
+      color: #1E2530;
+      text-align: left;
+      margin: 0.5em 0 1.3em 0;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 34px;
+    }
+    .starttime-row { display: flex; align-items: center; gap: 9px; }
+    .start-label { font-size: 17px; font-weight: 700; color: #235B7D; margin-right: 3px;}
+    .ios-timeline-flexwrap { display: flex; align-items: flex-start; justify-content: flex-start;}
     .timeline-area-flex {
       display: flex; align-items: flex-start; justify-content: flex-start;
-      background: linear-gradient(120deg,rgba(242,250,255,0.68) 78%,rgba(214,232,255,0.24) 100%);
-      border-radius: 19px; min-height: 100px; margin: 2em 0 1.5em 0;
-      box-shadow: 0 2px 13px rgba(130,180,255,0.09);
-      padding: 17px 12px 15px 15px; overflow-x: auto;
+      background: rgba(255,255,255,0.50); border-radius: 23px;
+      min-height: 116px; margin: 0.2em 0 1.5em 0;
+      box-shadow: 0 2px 12px rgba(55,95,170,0.09);
+      padding: 23px 15px 20px 18px; overflow-x: auto;
+    }
+    .timeline-area { display: flex; flex-wrap: wrap; gap: 18px 12px;}
+    .timeline-block {
+      display: inline-flex; flex-direction: column; align-items: center; position: relative;
+      border-radius: 21px; min-width: 112px; max-width: 210px; padding: 9px 14px 11px 14px;
+      font-size: 17px; font-weight: 600; letter-spacing: 0.9px;
+      margin: 0 0 6px 0; margin-right: 0;
+      background: rgba(255,255,255,0.68);
+      box-shadow: 0 3px 22px rgba(80,180,255,0.10), 0 2px 8px rgba(170,180,220,0.12);
+      backdrop-filter: blur(30px) saturate(1.23);
+      transition: box-shadow 0.19s;
+      border: 2px solid rgba(255,255,255,0.41);
+      overflow: hidden;
+      /* 鏡面反射感覺 */
       position: relative;
     }
-    .timeline-area { display: flex; flex-wrap: wrap; gap: 14px 10px;}
-    .timeline-block {
-      display: inline-flex; flex-direction: column; align-items: center;
-      position: relative; border-radius: 16px; min-width: 92px; max-width: 180px;
-      padding: 11px 13px 10px 13px; font-size: 15.3px; font-weight: 500; letter-spacing: 0.9px;
-      box-shadow: 0 2.5px 10px rgba(110,140,200,0.09);
-      backdrop-filter: blur(23px) saturate(1.21);
-      margin: 0 0 3px 0; margin-right: 0;
-      transition: box-shadow 0.17s, transform 0.13s;
-      border: 1.3px solid rgba(150,190,255,0.10);
-      background: linear-gradient(128deg,rgba(255,255,255,0.50) 64%,rgba(200,226,255,0.19) 100%);
-      overflow: visible;
+    .timeline-block.green {
+      background: linear-gradient(115deg, #41df96 60%, #E3FFF2 100%);
+      color: #1a4d31;
+      border: 2px solid #60F2B1;
     }
-    .timeline-block::before {
-      content: "";
-      position: absolute;
-      left: 5px; top: 2.5px; right: 5px; height: 3.7px;
-      background: linear-gradient(95deg,rgba(255,255,255,0.27),rgba(180,225,255,0.06) 86%);
-      border-radius: 5px;
-      pointer-events: none;
-      filter: blur(0.8px);
+    .timeline-block.blue {
+      background: linear-gradient(115deg, #4078FF 68%, #e0ebff 100%);
+      color: #214177;
+      border: 2px solid #5DC9FF;
+    }
+    .timeline-block.gray {
+      background: linear-gradient(115deg, #f5f7fa 70%, #e9ebf1 100%);
+      color: #23272E;
+      border: 2px solid #C6CFDD;
+    }
+    .timeline-block.pink {
+      background: linear-gradient(115deg, #FFD6E2 65%, #FFEFF7 100%);
+      color: #701A36;
+      border: 2px solid #FFA0BF;
+    }
+    .timeline-block.purple-l {
+      background: linear-gradient(115deg, #b9a8ff 64%, #f7f5ff 100%);
+      color: #432D71;
+      border: 2px solid #B8A9FF;
+    }
+    .timeline-block.purple-d {
+      background: linear-gradient(115deg, #a48cff 70%, #dbcefd 100%);
+      color: #fff;
+      border: 2px solid #735AE6;
     }
     .timeline-block .del-btn {
-      position: absolute; top: 4px; right: 4px;
-      background: #ff2222;
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 17px;
-      height: 17px;
-      font-size: 12.5px;
-      line-height: 16px;
-      cursor: pointer;
-      font-weight: bold;
-      padding: 0;
+      position: absolute;
+      top: 7px; right: 7px;
+      background: #FF2D55;
+      color: #fff; border: none; border-radius: 50%;
+      width: 19px; height: 19px; font-size: 13px;
+      line-height: 18px; cursor: pointer; font-weight: 900;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0.5px 2px rgba(180,0,0,0.13);
-      transition: background 0.19s, transform 0.12s;
-      z-index: 2;
+      box-shadow: 0 2px 6px rgba(210,40,80,0.10);
+      z-index: 2; opacity: 0.97;
+      transition: background 0.15s, transform 0.13s;
     }
-    .timeline-block .del-btn:hover { background: #c91010; transform: scale(1.13);}
-    .timeline-row-1 { font-weight: 900; font-size: 16.4px; color:#264577; margin-bottom: 1.5px;}
-    .timeline-row-2 { font-weight: 400; font-size: 13.6px; margin-top:1px; color: #696b70; min-height:17px;}
-    .timeline-row-3 { font-weight: 900; font-size: 17.2px; color: #244D4E; letter-spacing: 0.14px; margin-top: 2.5px;}
-    .custom-input { padding: 7px 12px; border-radius: 8px; border: 1px solid #bbc7d2; margin-right: 4px; font-size: 15px; outline: none; background: #f9fcff; box-shadow: 0 1px 4px rgba(110,160,200,0.03);}
-    .summary-bar { font-size: 1.13em; font-weight: 600; letter-spacing: 0.85px; min-width: 255px; color: #535353; text-align: right; margin-top: 8px; display: flex; flex-direction: row; align-items: center; justify-content: flex-end; gap: 20px;}
-    .summary-row { margin-bottom: 5px; margin-right: 14px;}
-    .ios-timeline-flexwrap { display: flex; align-items: flex-start; justify-content: space-between;}
-    .starttime-row { display: flex; align-items: center; gap: 8px; margin: 0 0 0 0;}
-    .start-label { font-size: 16.6px; font-weight: 700; color: #2a3557; margin-right: 2px;}
-    @media (max-width:900px){
-      .container {max-width: 99vw;}
-      .timeline-area-flex {padding-right: 5px;}
-      .ios-timeline-flexwrap { flex-direction: column; }
-      .summary-bar { margin-left: 0; margin-top: 18px;}
-      .starttime-row {justify-content: flex-start;}
+    .timeline-block .del-btn:hover { background: #bc2525; transform: scale(1.13);}
+    .timeline-row-1 {
+      font-weight: 900; font-size: 1.11em; letter-spacing: 1.2px; margin-bottom: 2px;
+      text-align: center; color: #181E23;
+    }
+    .timeline-row-2 {
+      font-weight: 500; font-size: 0.96em; color: #676B70; min-height:17px; margin-bottom: 2.5px;
+    }
+    .timeline-row-3 {
+      font-weight: 900; font-size: 1.14em; color: #20506E; letter-spacing: 0.1px;
+      margin-top: 2.5px; text-align:center;
+    }
+    @media (max-width:950px){
+      .container {max-width: 100vw; padding-left:4vw; padding-right:4vw;}
+      .timeline-area {gap: 12px 5px;}
+      .timeline-block {min-width:92px; padding:6px 6px 8px 7px;}
+    }
+    @media (max-width:570px){
+      h1 {font-size:1.27em;}
+      .timeline-block {min-width:86px;}
+      .block-btn {font-size:15px;}
     }
   </style>
 </head>
@@ -224,19 +269,11 @@
       <button class="block-btn purple-d" onclick="addTimeBlock('卸貨時間', 30, 'purple-d')">卸貨 30分鐘</button>
       <button class="block-btn purple-d" onclick="addTimeBlock('卸貨時間', 60, 'purple-d')">卸貨 60分鐘</button>
     </div>
-    <div class="label" style="margin-top:1.7em;"></div>
-    <div class="summary-bar" style="margin-top:10px; margin-bottom:10px; justify-content: flex-start;">
-      <span class="starttime-row">
-        <span class="start-label">出發時間：</span>
-        <input type="time" id="startTime" value="06:00" class="custom-input" style="width:100px;"/>
-      </span>
-      <span class="summary-row" id="endTimeLabel"></span>
-      <span class="summary-row" id="workTimeLabel"></span>
-    </div>
     <div class="ios-timeline-flexwrap">
-      <div class="timeline-area-flex">
-        <div class="timeline-area" id="timeline"></div>
-      </div>
+      <div class="summary-bar" id="summary"></div>
+    </div>
+    <div class="timeline-area-flex">
+      <div class="timeline-area" id="timeline"></div>
     </div>
   </div>
   <script>
@@ -251,7 +288,7 @@
       const timeline = document.getElementById('timeline');
       timeline.innerHTML = '';
       let totalMin = 0;
-      let startStr = document.getElementById('startTime').value || '06:00';
+      let startStr = document.getElementById('startTime') ? document.getElementById('startTime').value : '06:00';
       let [h, m] = startStr.split(':').map(x=>parseInt(x,10));
       let nowMin = h*60 + m;
       let timeNow = nowMin;
@@ -307,8 +344,15 @@
       let endMins = nowMin + totalMin;
       let eh = Math.floor(endMins/60)%24, em = endMins%60;
       let endStr = `${eh.toString().padStart(2,'0')}:${em.toString().padStart(2,'0')}`;
-      document.getElementById('endTimeLabel').innerHTML = `預計結束時間：${endStr}`;
-      document.getElementById('workTimeLabel').innerHTML = `總工時：${totalMin} 分鐘｜${minStr}`;
+      document.getElementById('summary').innerHTML = `
+        <span class="starttime-row">
+          <span class="start-label">出發時間：</span>
+          <input type="time" id="startTime" value="${startStr}" class="custom-input" style="width:100px;"/>
+        </span>
+        <span class="summary-row">預計結束時間：${endStr}</span>
+        <span class="summary-row">總工時：${totalMin} 分鐘｜${minStr}</span>
+      `;
+      document.getElementById('startTime').addEventListener('input', updateTimeline);
     }
     function delBlockAndAfter(idx) {
       timelineData = timelineData.slice(0, idx);
@@ -338,11 +382,7 @@
       }
       updateTimeline();
     }
-    // 頁面載入時只綁一次
-    window.onload = function(){
-      document.getElementById('startTime').addEventListener('input', updateTimeline);
-      updateTimeline();
-    };
+    window.onload = updateTimeline;
   </script>
 </body>
 </html>
